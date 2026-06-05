@@ -1,3 +1,4 @@
+import boto3
 import json
 import os
 import unicodedata
@@ -7,7 +8,7 @@ import urllib.request
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-import boto3
+
 
 
 DEFAULT_LOCATIONS = [
