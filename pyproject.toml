@@ -1,0 +1,23 @@
+[project]
+name = "project-aws-clima"
+version = "0.1.0"
+description = "Pipeline de dados climaticos com AWS Lambda, S3 e Visual Crossing"
+authors = [
+    {name = "Daniel",email = "f.daniel.m@gmail.com"}
+]
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "boto3 (>=1.43.24,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.3,<10.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)",
+    "ruff (>=0.15.16,<0.16.0)"
+]
