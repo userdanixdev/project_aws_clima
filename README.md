@@ -127,6 +127,8 @@ LICENSE	| Licença do projeto
 
 *Essas dependências foram adicionadas para apoiar desenvolvimento, testes e qualidade do código.*
 
+ `tzdata`: suporte a timezones IANA no Windows, como `America/Sao_Paulo`.
+
 ## 🔐 Variáveis de Ambiente:
 
 O projeto utiliza um arquivo .env local, que não deve ser versionado. O arquivo .env.example serve como modelo seguro.
@@ -145,6 +147,62 @@ o ambiente virtual está funcionando;
 o .env está sendo carregado;
 a chave da Visual Crossing é válida;
 a API está respondendo corretamente.
+
+### Teste da Lambda em Ambiente Local:
+
+Foi criado o script:
+
+```scripts/run_lambda_local.py```
+
+### Esse script executa localmente a função:
+
+```lambda_function.lambda_handler({}, None)```
+
+O teste local conseguiu executar a lógica da Lambda, mas retornou erro ao tentar gravar no S3:
+
+- Unable to locate credentials
+
+*Esse comportamento é esperado, porque localmente o boto3 precisa de credenciais AWS configuradas na máquina.*
+
+### Conclusão:
+
+- a função Lambda foi importada corretamente;
+- o lambda_handler existe e pode ser executado;
+- o carregamento de variáveis locais funcionou;
+- a API foi chamada;
+- a falha ocorreu somente na autenticação local com a AWS.
+
+*Em ambiente AWS Lambda, a autenticação com o S3 é feita por IAM Role, não por credenciais locais.*
+
+### Teste da Lambda em Nuvem:
+
+> A função Lambda foi testada no ambiente AWS e executou com sucesso.
+
+Resultado obtido:
+
+```python
+{
+  "statusCode": 200,
+  "message": "Weather ingestion finished",
+  "partition_date": "2026-06-04",
+  "success_count": 27,
+  "failure_count": 0
+}
+```
+
+*A Lambda coletou dados climáticos para 27 capitais brasileiras e salvou os arquivos JSON no Amazon S3.*
+
+### Separação de Responsabilidades:
+
+O projeto separa scripts locais da função de nuvem:
+
+```
+scripts/test_visual_crossing_request.py  -> teste local da API
+scripts/run_lambda_local.py              -> execução local da Lambda
+lambda_function.py                       -> função AWS Lambda
+```
+
+> Essa separação evita misturar código de teste com código de produção.
 
 ## 🧹 Qualidade de Código:
 
