@@ -162,6 +162,23 @@ O teste local conseguiu executar a lógica da Lambda, mas retornou erro ao tenta
 
 - Unable to locate credentials
 
+## Teste Local da Visual Crossing API:
+
+![Teste Local da Visual Crossing API](assets/tests.png)
+
+A imagem de ```tests_.png``` mostra o teste local de requisição e extração dos dados da Visual Crossing API pelo terminal.
+
+Ela evidencia que o script conseguiu carregar a chave da API pelo .env, montar a URL da Visual Crossing, fazer a requisição HTTP, receber a resposta em JSON, extrair campos do retorno e 
+imprimir no terminal dados como data, temperatura e condição climática.
+
+```
+Esse teste confirma que a etapa inicial do pipeline está funcionando: a aplicação consegue se conectar à fonte de dados, consumir a API e extrair informações climáticas do retorno.
+```
+
+### Teste Local da Lambda sem Credenciais AWS
+
+![Teste local da Lambda sem credenciais AWS](assets/lambda_credentials.png)
+
 *Esse comportamento é esperado, porque localmente o boto3 precisa de credenciais AWS configuradas na máquina.*
 
 ### Conclusão:
@@ -210,6 +227,34 @@ O projeto utiliza ruff para validação de estilo e identificação de problemas
 
 Durante o desenvolvimento, o ruff identificou um erro real de variável indefinida, o que reforça a importância de usar ferramentas de qualidade desde o início.
 
+### Validação de Qualidade com Ruff:
+
+![Validação de Qualidade com Ruff](assets/ruff_check.png)
+
+O **Ruff** é uma ferramenta de análise estática para código Python. Ele faz uma varredura nos arquivos do projeto e identifica problemas como erros de sintaxe, variáveis não definidas, imports não utilizados, más práticas e inconsistências de estilo.
+
+Depois da correção, o comando foi executado novamente:
+
+```
+ruff check .
+```
+
+### E o resultado foi:
+
+```
+All checks passed!
+```
+
+> Isso indica que a varredura foi concluída sem encontrar novos problemas.
+
+Essa etapa é importante porque ajuda a encontrar erros antes da execução do código em ambiente de nuvem, evitando falhas simples durante o deploy ou execução da AWS Lambda.
+
+Neste projeto, o Ruff foi utilizado para validar o código antes de avançar para a execução da Lambda e para o versionamento no GitHub.
+
+> O ponto (.) indica que o Ruff deve analisar todos os arquivos do projeto a partir da pasta atual.
+
+O erro acima significa que o código tentou usar uma variável chamada **e**, mas essa variável não existia naquele contexto. Sendo corrigida após a identificação do erro pelo **ruff**
+
 ### 🧠 Boas Práticas Aplicadas:
 
 ### Engenharia de Dados:
@@ -241,11 +286,6 @@ Durante o desenvolvimento, o ruff identificou um erro real de variável indefini
 ### 🗺️ Roadmap do Projeto
 Próximas etapas planejadas:
 
-- Criar a função lambda_function.py.
-- Adaptar a requisição da Visual Crossing para execução na AWS Lambda.
-- Gravar os dados brutos no Amazon S3.
-- Criar particionamento por data, fonte e localização.
-- Configurar variáveis de ambiente na Lambda.
 - Configurar IAM Role com permissão mínima para S3.
 - Agendar execução com Amazon EventBridge.
 - Criar catálogo com AWS Glue Crawler.
