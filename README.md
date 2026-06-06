@@ -304,3 +304,13 @@ Até o momento, o projeto possui:
 - script local consumindo a Visual Crossing API;
 - variáveis de ambiente funcionando;
 - validação com ruff;
+
+## 👤 Autor:
+
+``` Daniel Martins França ```
+
+
+## 📬 Contato:
+
+- 📧 Email: [f.daniel.m@gmail.com](mailto:f.daniel.m@gmail.com)  
+- 💼 LinkedIn: [www.linkedin.com/in/danixdev](https://www.linkedin.com/in/danixdev)  
