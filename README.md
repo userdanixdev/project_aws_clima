@@ -139,8 +139,6 @@ Antes de construir a Lambda, foi criado um script local para validar a conexão 
 
 ```scripts/test_visual_crossing_request.py```
 
-foto ilustrativa
-
 Esse teste confirma que:
 
 o ambiente virtual está funcionando;
