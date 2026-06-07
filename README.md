@@ -347,6 +347,81 @@ O projeto atualmente possui:
 - Payload serializado para evitar conflitos de schema;
 - Estrutura preparada para evolução para camadas Trusted e Refined.
 
+## 🚀 Quer executar o projeto e continuar?
+
+### 📌 1. Pré-requisitos 
+
+- Python 3.12+
+- Poetry instalado
+- Conta AWS ativa
+- AWS CLI configurado (`aws configure`)
+- Permissões para:
+  - AWS Lambda
+  - Amazon S3
+  - AWS Glue
+  - Amazon Athena
+
+### 📌 2. Clonar o repositório
+
+```
+git clone https://github.com/seu-usuario/project_aws_clima.git
+cd project_aws_clima
+```
+
+### 📌 3. Instalar dependências
+
+```
+poetry install
+```
+
+### 📌 4. Configurar variáveis de ambiente
+
+Crie um arquivo `.env` baseado no `.env.example`:
+
+```
+Exemplo:
+
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=meu-bucket-clima
+VISUAL_CROSSING_API_KEY=sua_chave_aqui
+```
+
+### 📌 5. Execução local (teste da API)
+
+```
+python scripts/test_visual_crossing_request.py
+```
+
+## 📌 6. Deploy da Lambda 
+
+O deploy da função Lambda pode ser realizado de duas formas, dependendo das permissões disponíveis na conta AWS:
+
+---
+### 🔹 1. Deploy via AWS Console 
+
+Este é o método mais simples e não requer configuração local de IAM CLI.
+
+1. Acesse o serviço AWS Lambda no console
+2. Crie uma nova função (ou edite uma existente)
+3. Escolha runtime Python 3.12
+4. Configurar handler:
+   ``` lambda_function.lambda_handler```
+5. Definir variáveis de ambiente na Lambda
+
+---
+
+### 🔹 2. Deploy via AWS CLI (ambiente mais avançado)
+
+Este método requer permissões IAM adequadas configuradas localmente.
+
+## 📌 7. Configuração do S3 + Glue + Athena
+
+1. Criar bucket S3 para camada Raw
+2. Configurar serviço AWS Lambda ( tests e deploy )
+3. Configurar AWS Glue Crawler para catalogação dos metadados.
+4. Consultar os dados no AWS Athena.
+
+
 ## 👤 Autor:
 
 ``` Daniel Martins França ```
