@@ -209,7 +209,7 @@ Resultado obtido:
 
 *A Lambda coletou dados climáticos para 27 capitais brasileiras e salvou os arquivos JSON no Amazon S3.*
 
-## Refatorada a camada Raw para evitar conflitos de schema no Glue e Athena:
+## Refatoração da camada Raw para evitar conflitos de schema no Glue e Athena:
 
 *Durante a modelagem da camada Raw, optou-se por armazenar o payload completo da API como string JSON (payload_json) para evitar conflitos de schema gerados pela inferência automática do AWS Glue em estruturas JSON dinâmicas.*
 
@@ -274,10 +274,9 @@ O erro acima significa que o código tentou usar uma variável chamada **e**, ma
 ### Engenharia de Dados:
 
 - Separação entre camada raw e futuras camadas tratadas.
-- Armazenamento do payload bruto da API.
+- Armazenamento do payload refatorado da API.
 - Uso de particionamento no S3.
-- Inclusão futura de metadados de extração.
-- Preparação para catálogo de dados com Glue.
+- Inclusão de metadados de extração com Glue AWS
 - Estrutura compatível com consultas no Athena.
 
 ### Desenvolvimento:
@@ -304,10 +303,10 @@ Próximas etapas planejadas:
 - Estruturar tabelas Iceberg em S3 Tables.
 - Implementar consultas analíticas na camada Trusted.
 - Automatizar validações de qualidade dos dados.
-- Criar dashboards com QuickSight.
-- Monitoramento com CloudWatch.
+- Criar dashboards.
+- Monitoramentos
 
-### 📌 Status Atual:
+---
 
 ## 📌 Status Atual
 
