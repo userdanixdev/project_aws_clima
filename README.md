@@ -1,5 +1,3 @@
-# 🌦️ Project AWS Clima
-
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)
 ![Amazon S3](https://img.shields.io/badge/Amazon-S3-green)
@@ -12,7 +10,8 @@
 ![Boto3](https://img.shields.io/badge/Boto3-AWS%20SDK-blue)
 ![JSON](https://img.shields.io/badge/JSON-Data%20Processing-black)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
+---
+# 🌦️ Project AWS Clima
 
 Projeto de engenharia de dados para coleta, ingestão e armazenamento de dados climáticos utilizando **Python**, **Visual Crossing Weather API**, **AWS Lambda** e **Amazon S3**.
 
