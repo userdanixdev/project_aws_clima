@@ -211,6 +211,8 @@ Resultado obtido:
 
 *Durante a modelagem da camada Raw, optou-se por armazenar o payload completo da API como string JSON (payload_json) para evitar conflitos de schema gerados pela inferência automática do AWS Glue em estruturas JSON dinâmicas.*
 
+*A validação da integração com Amazon S3 foi realizada diretamente através da execução da função AWS Lambda no ambiente da AWS, utilizando uma IAM Role com permissões específicas para gravação no bucket de destino.*
+
 ### Separação de Responsabilidades:
 
 O projeto separa scripts locais da função de nuvem:
