@@ -3,8 +3,16 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)
 ![Amazon S3](https://img.shields.io/badge/Amazon-S3-green)
+![AWS Glue](https://img.shields.io/badge/AWS-Glue-blue)
+![Amazon Athena](https://img.shields.io/badge/Amazon-Athena-purple)
+![IAM](https://img.shields.io/badge/AWS-IAM-red)
+![Data Lake](https://img.shields.io/badge/Data%20Lake-Architecture-0A66C2)
+![ETL](https://img.shields.io/badge/ETL-Pipeline-yellow)
 ![Poetry](https://img.shields.io/badge/Poetry-Dependency%20Management-purple)
+![Boto3](https://img.shields.io/badge/Boto3-AWS%20SDK-blue)
+![JSON](https://img.shields.io/badge/JSON-Data%20Processing-black)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
+
 
 Projeto de engenharia de dados para coleta, ingestão e armazenamento de dados climáticos utilizando **Python**, **Visual Crossing Weather API**, **AWS Lambda** e **Amazon S3**.
 
@@ -85,7 +93,7 @@ Para engenharia de dados, isso é útil porque facilita:
 - Visual Crossing Weather API
 - Git e GitHub
 
-### 📁 Estrutura Inicial do Projeto:
+### 📁 Estrutura do Projeto:
 ```
 project_aws_clima/
 ├── docs/
@@ -108,6 +116,9 @@ project_aws_clima/
 |--|--| 
 scripts/test_visual_crossing_request.py	|Script local para validar a conexão com a API
 lambda_function.py | 	Arquivo reservado para a função AWS Lambda
+scripts/ | Scripts de teste e validação local da API e integração
+docs/images/ | Screenshots de validação no AWS (Athena, S3, Lambda)
+docs/troubleshooting.md | Documentação de problemas, erros e soluções do pipeline
 .env.example |	Modelo das variáveis de ambiente necessárias
 .gitignore | Define arquivos que não devem ser versionados
 pyproject.toml |	Configuração do projeto Poetry
@@ -209,19 +220,31 @@ Resultado obtido:
 
 *A Lambda coletou dados climáticos para 27 capitais brasileiras e salvou os arquivos JSON no Amazon S3.*
 
-## Refatoração da camada Raw para evitar conflitos de schema no Glue e Athena:
+## 🚀✨ Refatoração da camada Raw para evitar conflitos de schema no Glue e Athena:
 
 *Durante a modelagem da camada Raw, optou-se por armazenar o payload completo da API como string JSON (payload_json) para evitar conflitos de schema gerados pela inferência automática do AWS Glue em estruturas JSON dinâmicas.*
 
 *A validação da integração com Amazon S3 foi realizada diretamente através da execução da função AWS Lambda no ambiente da AWS, utilizando uma IAM Role com permissões específicas para gravação no bucket de destino.*
 
-### Integração com Glue e Athena
+👉 Detalhes dos desafios técnicos encontrados durante o desenvolvimento estão documentados em:
+[Troubleshooting do projeto](docs/troubleshooting.md)
+
+### 🧩📊 Integração com Glue e Athena
 
 - Crawler criado com sucesso.
 - Catálogo gerado.
 - Partições reconhecidas.
 - Consultas funcionando no Athena.
 - Payload armazenado como string JSON.
+
+---
+
+📊 “Validação inicial da camada Raw no Athena após refatoração de schema (Glue Catalog integrado)”
+
+![Validacao inicial](docs/images/Screenshot_athena.png)
+
+---
+
 
 ### Separação de Responsabilidades:
 

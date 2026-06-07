@@ -1,8 +1,5 @@
-## Desafios Encontrados Durante o Desenvolvimento
-
-Durante a construção do pipeline de ingestão de dados climáticos, diversos desafios técnicos foram identificados. A análise e resolução desses problemas contribuíram para o entendimento prático de conceitos importantes de Engenharia de Dados, Data Lakes e serviços da AWS.
-
-### 1. Configuração de Credenciais AWS em Ambiente Local
+# Troubleshooting – Pipeline AWS Clima
+---
 ## Desafios Encontrados Durante o Desenvolvimento
 
 Durante a construção do pipeline de ingestão de dados climáticos, diversos desafios técnicos foram identificados. A análise e resolução desses problemas contribuíram para o entendimento prático de conceitos importantes de Engenharia de Dados, Data Lakes e serviços da AWS.
@@ -90,80 +87,26 @@ O campo `payload` continha múltiplos níveis de objetos aninhados (`struct`) e 
 
 ---
 
-### Próximos Passos
+## Evidência de Validação
 
-Para simplificar a arquitetura e facilitar futuras consultas analíticas, serão avaliadas as seguintes melhorias:
+📊 Validação inicial da camada Raw após refatoração
 
-* Armazenar o payload completo como texto JSON na camada Raw.
-* Criar uma camada Silver contendo apenas atributos relevantes para análise.
-* Converter dados para formatos colunares como Parquet.
-* Utilizar AWS Glue para transformação e catalogação dos dados.
-* Disponibilizar consultas analíticas através do Amazon Athena.
-
-Esses desafios permitiram aprofundar conhecimentos em AWS Lambda, Amazon S3, AWS Glue, Amazon Athena, particionamento de dados, modelagem de Data Lakes e boas práticas de Engenharia de Dados.
+![Athena validation](docs/images/Screenshot_athena.png)
 
 ---
 
-### 3. Colunas Duplicadas no Glue Catalog
+## Próximos Passos
 
-Após a execução do Glue Crawler, o Athena retornou o erro:
-
-```text
-HIVE_INVALID_METADATA:
-Table descriptor contains duplicate columns
-```
-
-Foi identificado que os campos `source`, `date` e `location` estavam sendo reconhecidos simultaneamente como colunas do arquivo JSON e como colunas de particionamento do Data Lake.
-
-**Aprendizado:**
-
-* Diferença entre colunas de dados e colunas de partição.
-* Importância do desenho correto da estrutura de diretórios no S3.
+- Armazenar payload como JSON bruto na Raw
+- Criar camada Silver com dados tratados
+- Converter para Parquet
+- Melhorar performance no Athena com Glue
 
 ---
 
-### 4. Problemas de Inferência Automática de Schema
+## Conclusão
 
-O Glue Crawler inferiu automaticamente estruturas complexas presentes no JSON retornado pela Visual Crossing Weather API, especialmente no campo:
-
-```json
-payload.stations
-```
-
-Como cada cidade possui estações meteorológicas diferentes, cada partição passou a apresentar um schema distinto.
-
-Isso resultou no erro:
-
-```text
-HIVE_PARTITION_SCHEMA_MISMATCH
-```
-
-**Aprendizado:**
-
-* Limitações da inferência automática de schemas em estruturas JSON altamente dinâmicas.
-* Importância da padronização de schemas para ambientes analíticos.
+Esses desafios consolidaram conhecimentos em AWS Lambda, S3, Glue, Athena e arquitetura de Data Lakes.
 
 ---
 
-### 5. Estruturas Complexas para Consulta Analítica
-
-O campo `payload` continha múltiplos níveis de objetos aninhados (`struct`) e arrays (`array<struct>`), dificultando consultas diretas no Athena.
-
-**Aprendizado:**
-
-* Diferença entre armazenamento operacional e armazenamento analítico.
-* Necessidade de transformação dos dados para formatos mais adequados ao consumo analítico.
-
----
-
-### Próximos Passos
-
-Para simplificar a arquitetura e facilitar futuras consultas analíticas, serão avaliadas as seguintes melhorias:
-
-* Armazenar o payload completo como texto JSON na camada Raw.
-* Criar uma camada Silver contendo apenas atributos relevantes para análise.
-* Converter dados para formatos colunares como Parquet.
-* Utilizar AWS Glue para transformação e catalogação dos dados.
-* Disponibilizar consultas analíticas através do Amazon Athena.
-
-Esses desafios permitiram aprofundar conhecimentos em AWS Lambda, Amazon S3, AWS Glue, Amazon Athena, particionamento de dados, modelagem de Data Lakes e boas práticas de Engenharia de Dados.
