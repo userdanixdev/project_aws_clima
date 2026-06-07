@@ -109,14 +109,23 @@ def lambda_handler(event, context):
             payload = fetch_weather(location, start_date, end_date, api_key)
 
             raw_record = {
-                "source": "visual_crossing",
+                # "source": "visual_crossing",
+# O Athena interpreta como uma coluna duplicada com outra 'source' de Particionamento.
+# Dessa forma, retirada da ingestão.
                 "location_requested": location,
                 "location_resolved": payload.get("resolvedAddress"),
-                "start_date": start_date,
-                "end_date": end_date,
+#                "start_date": start_date,
+# Removido por ser reduntante e podem ser obtidas pelo particionamento e pelo payload
+#                "end_date": end_date,
+# Removido por ser reduntante e podem ser obtidas pelo particionamento e pelo payload.
                 "extraction_timestamp": extraction_timestamp,
-                "payload": payload,
+                #"payload": payload,
+                "payload_json":json.dumps(payload, ensure_ascii=False)
             }
+# O problema que o serviço da AWS Glue tenta interpretar todo o JSON da API. Cada cidade possui
+# estações diferentes. A correção será o JSON como texto. Dessa forma o Glue irá exergar tudo como string.
+# Sem STRUCT aninhada e conflito de schema entre as cidades e entre partições.
+#  Assim não aparecerá o erro: HIVE_PARTITION_SCHEMA_MISMATCH            
 
             object_key = (
                 f"raw/clima/source=visual_crossing/date={partition_date}/"

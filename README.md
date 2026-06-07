@@ -207,6 +207,10 @@ Resultado obtido:
 
 *A Lambda coletou dados climáticos para 27 capitais brasileiras e salvou os arquivos JSON no Amazon S3.*
 
+## Refatorada a camada Raw para evitar conflitos de schema no Glue e Athena:
+
+*Durante a modelagem da camada Raw, optou-se por armazenar o payload completo da API como string JSON (payload_json) para evitar conflitos de schema gerados pela inferência automática do AWS Glue em estruturas JSON dinâmicas.*
+
 ### Separação de Responsabilidades:
 
 O projeto separa scripts locais da função de nuvem:
