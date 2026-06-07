@@ -80,7 +80,6 @@ Para engenharia de dados, isso é útil porque facilita:
 - python-dotenv para leitura de variáveis locais
 - boto3 para integração com serviços AWS
 - ruff para qualidade e padronização do código
-- pytest para testes
 - AWS Lambda
 - Amazon S3
 - Visual Crossing Weather API
