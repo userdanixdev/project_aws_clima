@@ -91,7 +91,7 @@ O campo `payload` continha múltiplos níveis de objetos aninhados (`struct`) e 
 
 📊 Validação inicial da camada Raw após refatoração
 
-![Athena validation](docs/images/Screenshot_athena.png)
+![Athena validation](docs/images/screenshot_athena.png)
 
 ---
 
