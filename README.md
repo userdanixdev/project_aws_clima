@@ -539,7 +539,7 @@ git clone https://github.com/seu-usuario/project_aws_clima.git
 cd project_aws_clima
 ```
 
-### 📌 3. Instalar dependências
+### 📌 3. Instalar dependências com ou sem o poetry
 
 ```
 poetry install
@@ -562,6 +562,7 @@ VISUAL_CROSSING_API_KEY=sua_chave_aqui
 ```
 python scripts/test_visual_crossing_request.py
 ```
+*A request e KEY são criadas pela IA da Visual Crossing no site oficial*
 
 ## 📌 6. Deploy da Lambda 
 
