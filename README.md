@@ -290,6 +290,182 @@ Neste projeto, o Ruff foi utilizado para validar o código antes de avançar par
 > O ponto (.) indica que o Ruff deve analisar todos os arquivos do projeto a partir da pasta atual.
 
 O erro acima significa que o código tentou usar uma variável chamada **e**, mas essa variável não existia naquele contexto. Sendo corrigida após a identificação do erro pelo **ruff**
+---
+
+# 🚀 Feature: Auditoria AWS e Validação da Ingestão
+
+Esta etapa do projeto teve como objetivo aumentar a confiabilidade da plataforma através da validação da infraestrutura AWS, da conectividade com os serviços utilizados e da verificação automática da ingestão realizada pela AWS Lambda.
+
+---
+
+## 🎯 Objetivos da Feature
+
+* Validar credenciais AWS configuradas localmente.
+* Confirmar acesso ao Amazon S3.
+* Auditar informações básicas da conta e dos buckets.
+* Validar a execução da ingestão realizada pela AWS Lambda.
+* Verificar a criação das partições da camada Raw.
+* Gerar evidências em formato JSON para auditoria e troubleshooting.
+* Facilitar a manutenção e evolução da plataforma.
+
+---
+
+# ☁️ Auditoria AWS
+
+Script responsável por validar a conectividade com a conta AWS e coletar informações do ambiente.
+
+## Arquivo
+
+```text
+scripts/aws_report.py
+```
+
+## Funcionalidades:
+
+1. Validação de autenticação AWS
+2. Verificação de acesso ao Amazon S3
+3. Coleta de metadados da resposta AWS
+4. Identificação da região configurada
+5. Contagem de buckets disponíveis
+6. Exibição formatada utilizando Rich
+7. Exportação de relatório JSON
+
+---
+
+## Exemplo de informações coletadas:
+
+```json
+{
+    "request_id": "SNC29A1G7M39WMEG",
+    "status_code": 200,
+    "region": "us-east-2",
+    "bucket_count": 1,
+    "first_bucket": "amazon-s3-clima-project-442767638718-us-east-2-an"
+}
+```
+
+---
+
+## Relatório gerado
+
+```text
+reports/aws_report.json
+```
+
+---
+
+# 🌦️ Validação da Ingestão da Lambda
+
+Script responsável por validar se a AWS Lambda realizou corretamente a ingestão dos dados climáticos no Amazon S3.
+
+## Arquivo
+
+```text
+scripts/validacao_lambda.py
+```
+
+## Funcionalidades:
+
+1. Leitura automática do bucket configurado
+2. Navegação por todos os objetos utilizando paginação AWS
+3. Contagem total de arquivos ingeridos
+4. Identificação automática das partições
+5. Validação da estrutura utilizada pelo Glue e Athena
+6. Geração de evidências para auditoria
+7. Exportação de relatório JSON
+
+---
+
+## Estrutura validada
+
+A validação verifica se os arquivos foram gravados seguindo o padrão:
+
+```text
+raw/
+└── clima/
+    └── source=visual_crossing/
+        └── date=YYYY-MM-DD/
+            └── location=<cidade>/
+                └── weather_*.json
+```
+
+Exemplo:
+
+```text
+raw/clima/source=visual_crossing/date=2026-06-09/location=sao_paulo_br/weather_20260609010101.json
+```
+
+---
+
+## Exemplo de relatório gerado
+
+```json
+{
+    "bucket": "amazon-s3-clima-project-442767638718-us-east-2-an",
+    "prefix": "raw/clima",
+    "total_arquivos": 27,
+    "total_particoes": 27,
+    "particoes": {
+        "date=2026-06-09/location=sao_paulo_br": 1,
+        "date=2026-06-09/location=goiania_br": 1,
+        "date=2026-06-09/location=rio_de_janeiro_br": 1
+    }
+}
+```
+
+---
+
+## Relatório gerado
+
+```text
+reports/validacao_lambda.json
+```
+
+---
+
+# 📊 Evidências Geradas
+
+Todos os relatórios produzidos durante a execução são armazenados automaticamente na pasta:
+
+```text
+reports/
+├── aws_report.json
+└── validacao_lambda.json
+```
+
+Esses arquivos servem como:
+
+* Evidência de execução
+* Auditoria técnica
+* Troubleshooting
+* Validação da infraestrutura
+* Apoio para futuras evoluções do projeto
+
+---
+
+# 🏗️ Benefícios Obtidos
+
+### Confiabilidade
+
+A infraestrutura pode ser validada rapidamente antes de novas implantações.
+
+### Observabilidade
+
+As informações críticas da AWS ficam registradas em arquivos de auditoria.
+
+### Rastreabilidade
+
+As execuções passam a possuir evidências persistidas.
+
+### Governança
+
+Permite validar se os dados estão sendo armazenados corretamente antes da catalogação pelo AWS Glue.
+
+### Qualidade de Dados
+
+Confirma que a estrutura de particionamento esperada foi criada corretamente.
+
+---
 
 ### 🧠 Boas Práticas Aplicadas:
 
@@ -318,6 +494,7 @@ O erro acima significa que o código tentou usar uma variável chamada **e**, ma
 - Lambda usará IAM Role para acessar o S3.
 - Permissões IAM devem seguir o princípio do menor privilégio.
 
+<<<<<<< HEAD
 ### 🗺️ Roadmap do Projeto
 Próximas etapas planejadas:
 
@@ -329,6 +506,8 @@ Próximas etapas planejadas:
 - Monitoramentos
 
 ---
+=======
+>>>>>>> feature/aws-report-cli
 
 ## 📌 Status Atual
 
@@ -346,6 +525,7 @@ O projeto atualmente possui:
 - Payload serializado para evitar conflitos de schema;
 - Estrutura preparada para evolução para camadas Trusted e Refined.
 
+<<<<<<< HEAD
 ## 🚀 Quer executar o projeto e continuar?
 
 ### 📌 1. Pré-requisitos 
@@ -419,6 +599,8 @@ Este método requer permissões IAM adequadas configuradas localmente.
 2. Configurar serviço AWS Lambda ( tests e deploy )
 3. Configurar AWS Glue Crawler para catalogação dos metadados.
 4. Consultar os dados no AWS Athena.
+=======
+>>>>>>> feature/aws-report-cli
 
 
 ## 👤 Autor:
