@@ -92,6 +92,7 @@ Para engenharia de dados, isso é útil porque facilita:
 - Visual Crossing Weather API
 - Git e GitHub
 
+
 ### 📁 Estrutura do Projeto:
 ```
 project_aws_clima/
@@ -99,8 +100,14 @@ project_aws_clima/
 │   ├── images/
 │   └── troubleshooting.md
 ├── scripts/
+|       └── reports/
+|              └── aws_report.json
+|              └── validacao_lambda.json
 │   ├── run_lambda_local.py
-│   └── test_visual_crossing_request.py
+│   └── aws_report.py
+|   └── validation_ingestion_lambda.py
+|    
+|    
 ├── lambda_function.py
 ├── README.md
 ├── LICENSE
@@ -361,7 +368,7 @@ Script responsável por validar se a AWS Lambda realizou corretamente a ingestã
 ## Arquivo
 
 ```text
-scripts/validacao_lambda.py
+scripts/validation_ingestion_lambda.py
 ```
 
 ## Funcionalidades:
@@ -418,7 +425,7 @@ raw/clima/source=visual_crossing/date=2026-06-09/location=sao_paulo_br/weather_2
 ## Relatório gerado
 
 ```text
-reports/validacao_lambda.json
+reports/validation_ingestion_lambda.json
 ```
 
 ---
@@ -430,7 +437,7 @@ Todos os relatórios produzidos durante a execução são armazenados automatica
 ```text
 reports/
 ├── aws_report.json
-└── validacao_lambda.json
+└── validation_ingestion_lambda.json
 ```
 
 Esses arquivos servem como:
@@ -494,20 +501,6 @@ Confirma que a estrutura de particionamento esperada foi criada corretamente.
 - Lambda usará IAM Role para acessar o S3.
 - Permissões IAM devem seguir o princípio do menor privilégio.
 
-<<<<<<< HEAD
-### 🗺️ Roadmap do Projeto
-Próximas etapas planejadas:
-
-- Criar camada Trusted utilizando Glue ETL.
-- Estruturar tabelas Iceberg em S3 Tables.
-- Implementar consultas analíticas na camada Trusted.
-- Automatizar validações de qualidade dos dados.
-- Criar dashboards.
-- Monitoramentos
-
----
-=======
->>>>>>> feature/aws-report-cli
 
 ## 📌 Status Atual
 
@@ -525,7 +518,6 @@ O projeto atualmente possui:
 - Payload serializado para evitar conflitos de schema;
 - Estrutura preparada para evolução para camadas Trusted e Refined.
 
-<<<<<<< HEAD
 ## 🚀 Quer executar o projeto e continuar?
 
 ### 📌 1. Pré-requisitos 
@@ -599,8 +591,6 @@ Este método requer permissões IAM adequadas configuradas localmente.
 2. Configurar serviço AWS Lambda ( tests e deploy )
 3. Configurar AWS Glue Crawler para catalogação dos metadados.
 4. Consultar os dados no AWS Athena.
-=======
->>>>>>> feature/aws-report-cli
 
 
 ## 👤 Autor:
