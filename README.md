@@ -581,9 +581,14 @@ Este é o método mais simples e não requer configuração local de IAM CLI.
 
 ---
 
-### 🔹 2. Deploy via AWS CLI (ambiente mais avançado)
+### 🔹 2. Deploy via AWS CLI 
 
-Este método requer permissões IAM adequadas configuradas localmente.
+Este método requer permissões IAM adequadas configuradas localmente. E depois execute o comando.
+
+```
+python scripts/run_lambda_local.py
+```
+ou ``` python lambda_function.py ```
 
 ## 📌 7. Configuração do S3 + Glue + Athena
 
@@ -592,6 +597,11 @@ Este método requer permissões IAM adequadas configuradas localmente.
 3. Configurar AWS Glue Crawler para catalogação dos metadados.
 4. Consultar os dados no AWS Athena.
 
+## 📌 8. Para validar as execuções é bom executar os comandos:
+
+```python scripts/aws_report.py```
+---
+``` python scripts/validation_ingestion_lambda```
 
 ## 👤 Autor:
 
