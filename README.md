@@ -247,7 +247,7 @@ Resultado obtido:
 
 📊 “Validação inicial da camada Raw no Athena após refatoração de schema (Glue Catalog integrado)”
 
-![Validacao inicial](docs/images/Screenshot_athena.png)
+![Validacao inicial](docs/images/shot_athena.png)
 
 ---
 
@@ -529,8 +529,8 @@ O projeto atualmente possui:
 - Permissões para:
   - AWS Lambda
   - Amazon S3
-  - AWS Glue
-  - Amazon Athena
+  
+  
 
 ### 📌 2. Clonar o repositório
 
