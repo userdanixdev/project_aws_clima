@@ -1,0 +1,8 @@
+{
+    "region_name": "us-east-2",
+    "database": "AwsDataCatalog",
+    "schema": "landing",
+    "s3_staging_dir": "s3://amazon-s3-clima-project-442767638718-us-east-2-an/metadata/",
+    "s3_data_dir": "s3://amazon-s3-clima-project-442767638718-us-east-2-an/tables/",
+    "threads": 4
+}
