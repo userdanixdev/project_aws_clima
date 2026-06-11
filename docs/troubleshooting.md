@@ -110,3 +110,60 @@ Esses desafios consolidaram conhecimentos em AWS Lambda, S3, Glue, Athena e arqu
 
 ---
 
+### 5. Estruturas Complexas para Consulta Analítica
+
+O campo `payload` continha múltiplos níveis de objetos aninhados (`struct`) e arrays (`array<struct>`), dificultando consultas diretas no Athena.
+
+**Aprendizado:**
+
+* Diferença entre armazenamento operacional e armazenamento analítico.
+* Necessidade de transformação dos dados para formatos mais adequados ao consumo analítico.
+
+---
+
+### 6. Erro de Resolução de Coluna no dbt (Camada Intermediate)
+
+Durante a esteira de transformação de dados na camada Intermediate utilizando o dbt (Data Build Tool), a execução do modelo ```int_clima_diario``` falhou ao tentar referenciar uma coluna inexistente ou nomeada incorretamente.
+O terminal retornou o seguinte erro de compilação/runtime:PlaintextFailure in model int_clima_diario (models\intermediate\int_clima_diario.sql)
+
+![double_shooting_coluna_lua](images/double_shotting_dbt.png)
+
+### Causa do Problema:
+
+O código SQL do modelo tentava selecionar ou operar sobre uma coluna chamada ```fase_lua_valor```, mas o schema vindo da camada anterior (Silver/Staging) continha apenas o campo ```fase_lua``` (provavelmente um valor numérico ou código bruto), quebrando a linhagem dos dados (data lineage).
+
+### 7. Implementação de Macro Customizada para Tradução de Negócio
+
+Para resolver o erro de coluna ausente e enriquecer o modelo com regras de negócio claras, foi mapeada a coluna correta (fase_lua) e aplicada uma macro customizada chamada ```classify_moon_phase.```
+
+Essa macro automatiza a classificação dos valores numéricos da fase da lua diretamente em strings legíveis para a camada analítica:
+
+```{{ classify_moon_phase('fase_lua') }} AS fase_lua_nome```
+
+### Benefícios da Solução:
+
+Eliminação do Erro: Substituiu-se a chamada da antiga coluna incorreta pelo campo mapeado da fonte.
+
+### Reutilização de Código: 
+
+Centralização da regra de negócio (tradução de códigos climáticos) em uma macro dbt reutilizável por outros modelos.
+
+### Legibilidade:
+
+Facilita o consumo final dos dados por ferramentas de BI, substituindo métricas brutas por rótulos compreensíveis (ex: "Cheia", "Nova")
+
+## 8. Validação e Execução com Sucesso da Camada Intermediate: 
+
+Após ajustar a referência do campo e aplicar a macro de classificação, o dbt foi executado novamente para validar o pipeline. O modelo ```int_clima_diario``` foi processado e materializado como uma SQL View com sucesso.
+
+![resolver_fase_lua](images/resolver_fase_lua.png)
+
+
+Log de Sucesso no Terminal:
+
+![log_terminal_intermediate_test](images/resolve_fase_lua_intermediate.png)
+
+
+### Aprendizado:
+
+Importância de garantir a consistência de nomenclaturas entre camadas do Data Lake (Raw $\rightarrow$ Silver $\rightarrow$ Gold).
