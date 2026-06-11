@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: int_clima_diario
+    description: >
+      Camada intermediária responsável pelo enriquecimento dos dados climáticos,
+      aplicação de regras de negócio e geração de métricas derivadas para consumo
+      analítico.
+
+    columns:
+
+      - name: id_cidade
+        description: Identificador único da cidade.
+        tests:
+          - not_null
+
+      - name: cidade
+        description: Nome da cidade consultada.
+
+      - name: data
+        description: Data da observação climática.
+
+      - name: amplitude_termica
+        description: Diferença entre temperatura máxima e mínima do dia.
+
+      - name: precipitacao_esperada
+        description: Precipitação ponderada pela probabilidade de ocorrência.
+
+      - name: horas_sol
+        description: Quantidade estimada de horas entre nascer e pôr do sol.
+
+      - name: faixa_temperatura
+        description: Classificação da temperatura observada.
+        tests:
+          - accepted_values:
+              values:
+                - Frio
+                - Ameno
+                - Quente
+                - Muito Quente
+
+      - name: faixa_uv
+        tests:
+          - accepted_values:
+              values:
+                - Baixo
+                - Moderado
+                - Alto
+                - Muito Alto
+                - Extremo
+
+        description: Classificação do índice UV.
+
+      - name: faixa_umidade
+        description: Classificação da umidade relativa do ar.
+
+      - name: faixa_vento
+        description: Classificação da intensidade do vento.
+
+      - name: faixa_visibilidade
+        description: Classificação da visibilidade atmosférica.
+
+      - name: fase_lua_nome
+        description: Nome textual da fase da lua.
+
+      - name: houve_chuva
+        description: Indica se houve precipitação registrada.
+
+      - name: alta_probabilidade_chuva
+        description: Indica probabilidade de chuva superior a 70%.
+
+      - name: alerta_uv
+        description: Indica condição de alerta para índice UV elevado.
+
+      - name: alerta_calor
+        description: Indica temperatura máxima igual ou superior a 35°C.
+
+      - name: alerta_vento
+        description: Indica rajadas de vento potencialmente severas.
+
+      - name: score_climatico
+        description: Indicador composto para análise climática.
