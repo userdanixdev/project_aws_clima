@@ -1,0 +1,53 @@
+{
+    "response_metadata": {
+        "RequestId": "RGJ51S9CD8BMC4TR",
+        "HostId": "A35z7EiXQKVcse1dQi0GypiZsDQBZ9yC71Br53Ob+gXr3Sh7VxfXYVhafMjl3gIUP/tS9hHNbLpguARopA2bj9eZPuRFlaaS",
+        "HTTPStatusCode": 200,
+        "HTTPHeaders": {
+            "x-amz-id-2": "A35z7EiXQKVcse1dQi0GypiZsDQBZ9yC71Br53Ob+gXr3Sh7VxfXYVhafMjl3gIUP/tS9hHNbLpguARopA2bj9eZPuRFlaaS",
+            "x-amz-request-id": "RGJ51S9CD8BMC4TR",
+            "date": "Tue, 09 Jun 2026 01:25:29 GMT",
+            "content-type": "application/xml",
+            "transfer-encoding": "chunked",
+            "server": "AmazonS3"
+        },
+        "RetryAttempts": 0
+    },
+    "buckets": [
+        {
+            "Name": "amazon-s3-clima-project-442767638718-us-east-2-an",
+            "CreationDate": "2026-06-04T22:20:33+00:00",
+            "BucketArn": "arn:aws:s3:::amazon-s3-clima-project-442767638718-us-east-2-an"
+        }
+    ],
+    "owner": {
+        "ID": "c5a169d2d9936160db2f82e155488cc1f4c2517a2ac4d55d0e7cb8c6b33e2d04"
+    },
+    "total_buckets": 1,
+    "raw": {
+        "ResponseMetadata": {
+            "RequestId": "RGJ51S9CD8BMC4TR",
+            "HostId": "A35z7EiXQKVcse1dQi0GypiZsDQBZ9yC71Br53Ob+gXr3Sh7VxfXYVhafMjl3gIUP/tS9hHNbLpguARopA2bj9eZPuRFlaaS",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amz-id-2": "A35z7EiXQKVcse1dQi0GypiZsDQBZ9yC71Br53Ob+gXr3Sh7VxfXYVhafMjl3gIUP/tS9hHNbLpguARopA2bj9eZPuRFlaaS",
+                "x-amz-request-id": "RGJ51S9CD8BMC4TR",
+                "date": "Tue, 09 Jun 2026 01:25:29 GMT",
+                "content-type": "application/xml",
+                "transfer-encoding": "chunked",
+                "server": "AmazonS3"
+            },
+            "RetryAttempts": 0
+        },
+        "Buckets": [
+            {
+                "Name": "amazon-s3-clima-project-442767638718-us-east-2-an",
+                "CreationDate": "2026-06-04T22:20:33+00:00",
+                "BucketArn": "arn:aws:s3:::amazon-s3-clima-project-442767638718-us-east-2-an"
+            }
+        ],
+        "Owner": {
+            "ID": "c5a169d2d9936160db2f82e155488cc1f4c2517a2ac4d55d0e7cb8c6b33e2d04"
+        }
+    }
+}

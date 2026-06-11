@@ -1,10 +1,17 @@
-# 🌦️ Project AWS Clima
-
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)
 ![Amazon S3](https://img.shields.io/badge/Amazon-S3-green)
+![AWS Glue](https://img.shields.io/badge/AWS-Glue-blue)
+![Amazon Athena](https://img.shields.io/badge/Amazon-Athena-purple)
+![IAM](https://img.shields.io/badge/AWS-IAM-red)
+![Data Lake](https://img.shields.io/badge/Data%20Lake-Architecture-0A66C2)
+![ETL](https://img.shields.io/badge/ETL-Pipeline-yellow)
 ![Poetry](https://img.shields.io/badge/Poetry-Dependency%20Management-purple)
+![Boto3](https://img.shields.io/badge/Boto3-AWS%20SDK-blue)
+![JSON](https://img.shields.io/badge/JSON-Data%20Processing-black)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
+---
+# 🌦️ Project AWS Clima
 
 Projeto de engenharia de dados para coleta, ingestão e armazenamento de dados climáticos utilizando **Python**, **Visual Crossing Weather API**, **AWS Lambda** e **Amazon S3**.
 
@@ -80,21 +87,27 @@ Para engenharia de dados, isso é útil porque facilita:
 - python-dotenv para leitura de variáveis locais
 - boto3 para integração com serviços AWS
 - ruff para qualidade e padronização do código
-- pytest para testes
 - AWS Lambda
 - Amazon S3
 - Visual Crossing Weather API
 - Git e GitHub
 
-### 📁 Estrutura Inicial do Projeto:
+
+### 📁 Estrutura do Projeto:
 ```
 project_aws_clima/
 ├── docs/
 │   ├── images/
 │   └── troubleshooting.md
 ├── scripts/
+|       └── reports/
+|              └── aws_report.json
+|              └── validacao_lambda.json
 │   ├── run_lambda_local.py
-│   └── test_visual_crossing_request.py
+│   └── aws_report.py
+|   └── validation_ingestion_lambda.py
+|    
+|    
 ├── lambda_function.py
 ├── README.md
 ├── LICENSE
@@ -109,6 +122,9 @@ project_aws_clima/
 |--|--| 
 scripts/test_visual_crossing_request.py	|Script local para validar a conexão com a API
 lambda_function.py | 	Arquivo reservado para a função AWS Lambda
+scripts/ | Scripts de teste e validação local da API e integração
+docs/images/ | Screenshots de validação no AWS (Athena, S3, Lambda)
+docs/troubleshooting.md | Documentação de problemas, erros e soluções do pipeline
 .env.example |	Modelo das variáveis de ambiente necessárias
 .gitignore | Define arquivos que não devem ser versionados
 pyproject.toml |	Configuração do projeto Poetry
@@ -210,19 +226,31 @@ Resultado obtido:
 
 *A Lambda coletou dados climáticos para 27 capitais brasileiras e salvou os arquivos JSON no Amazon S3.*
 
-## Refatorada a camada Raw para evitar conflitos de schema no Glue e Athena:
+## 🚀✨ Refatoração da camada Raw para evitar conflitos de schema no Glue e Athena:
 
 *Durante a modelagem da camada Raw, optou-se por armazenar o payload completo da API como string JSON (payload_json) para evitar conflitos de schema gerados pela inferência automática do AWS Glue em estruturas JSON dinâmicas.*
 
 *A validação da integração com Amazon S3 foi realizada diretamente através da execução da função AWS Lambda no ambiente da AWS, utilizando uma IAM Role com permissões específicas para gravação no bucket de destino.*
 
-### Integração com Glue e Athena
+👉 Detalhes dos desafios técnicos encontrados durante o desenvolvimento estão documentados em:
+[Troubleshooting do projeto](docs/troubleshooting.md)
+
+### 🧩📊 Integração com Glue e Athena
 
 - Crawler criado com sucesso.
 - Catálogo gerado.
 - Partições reconhecidas.
 - Consultas funcionando no Athena.
 - Payload armazenado como string JSON.
+
+---
+
+📊 “Validação inicial da camada Raw no Athena após refatoração de schema (Glue Catalog integrado)”
+
+![Validacao inicial](docs/images/shot_athena.png)
+
+---
+
 
 ### Separação de Responsabilidades:
 
@@ -269,16 +297,191 @@ Neste projeto, o Ruff foi utilizado para validar o código antes de avançar par
 > O ponto (.) indica que o Ruff deve analisar todos os arquivos do projeto a partir da pasta atual.
 
 O erro acima significa que o código tentou usar uma variável chamada **e**, mas essa variável não existia naquele contexto. Sendo corrigida após a identificação do erro pelo **ruff**
+---
+
+# 🚀 Feature: Auditoria AWS e Validação da Ingestão
+
+Esta etapa do projeto teve como objetivo aumentar a confiabilidade da plataforma através da validação da infraestrutura AWS, da conectividade com os serviços utilizados e da verificação automática da ingestão realizada pela AWS Lambda.
+
+---
+
+## 🎯 Objetivos da Feature
+
+* Validar credenciais AWS configuradas localmente.
+* Confirmar acesso ao Amazon S3.
+* Auditar informações básicas da conta e dos buckets.
+* Validar a execução da ingestão realizada pela AWS Lambda.
+* Verificar a criação das partições da camada Raw.
+* Gerar evidências em formato JSON para auditoria e troubleshooting.
+* Facilitar a manutenção e evolução da plataforma.
+
+---
+
+# ☁️ Auditoria AWS
+
+Script responsável por validar a conectividade com a conta AWS e coletar informações do ambiente.
+
+## Arquivo
+
+```text
+scripts/aws_report.py
+```
+
+## Funcionalidades:
+
+1. Validação de autenticação AWS
+2. Verificação de acesso ao Amazon S3
+3. Coleta de metadados da resposta AWS
+4. Identificação da região configurada
+5. Contagem de buckets disponíveis
+6. Exibição formatada utilizando Rich
+7. Exportação de relatório JSON
+
+---
+
+## Exemplo de informações coletadas:
+
+```json
+{
+    "request_id": "SNC29A1G7M39WMEG",
+    "status_code": 200,
+    "region": "us-east-2",
+    "bucket_count": 1,
+    "first_bucket": "amazon-s3-clima-project-442767638718-us-east-2-an"
+}
+```
+
+---
+
+## Relatório gerado
+
+```text
+reports/aws_report.json
+```
+
+---
+
+# 🌦️ Validação da Ingestão da Lambda
+
+Script responsável por validar se a AWS Lambda realizou corretamente a ingestão dos dados climáticos no Amazon S3.
+
+## Arquivo
+
+```text
+scripts/validation_ingestion_lambda.py
+```
+
+## Funcionalidades:
+
+1. Leitura automática do bucket configurado
+2. Navegação por todos os objetos utilizando paginação AWS
+3. Contagem total de arquivos ingeridos
+4. Identificação automática das partições
+5. Validação da estrutura utilizada pelo Glue e Athena
+6. Geração de evidências para auditoria
+7. Exportação de relatório JSON
+
+---
+
+## Estrutura validada
+
+A validação verifica se os arquivos foram gravados seguindo o padrão:
+
+```text
+raw/
+└── clima/
+    └── source=visual_crossing/
+        └── date=YYYY-MM-DD/
+            └── location=<cidade>/
+                └── weather_*.json
+```
+
+Exemplo:
+
+```text
+raw/clima/source=visual_crossing/date=2026-06-09/location=sao_paulo_br/weather_20260609010101.json
+```
+
+---
+
+## Exemplo de relatório gerado
+
+```json
+{
+    "bucket": "amazon-s3-clima-project-442767638718-us-east-2-an",
+    "prefix": "raw/clima",
+    "total_arquivos": 27,
+    "total_particoes": 27,
+    "particoes": {
+        "date=2026-06-09/location=sao_paulo_br": 1,
+        "date=2026-06-09/location=goiania_br": 1,
+        "date=2026-06-09/location=rio_de_janeiro_br": 1
+    }
+}
+```
+
+---
+
+## Relatório gerado
+
+```text
+reports/validation_ingestion_lambda.json
+```
+
+---
+
+# 📊 Evidências Geradas
+
+Todos os relatórios produzidos durante a execução são armazenados automaticamente na pasta:
+
+```text
+reports/
+├── aws_report.json
+└── validation_ingestion_lambda.json
+```
+
+Esses arquivos servem como:
+
+* Evidência de execução
+* Auditoria técnica
+* Troubleshooting
+* Validação da infraestrutura
+* Apoio para futuras evoluções do projeto
+
+---
+
+# 🏗️ Benefícios Obtidos
+
+### Confiabilidade
+
+A infraestrutura pode ser validada rapidamente antes de novas implantações.
+
+### Observabilidade
+
+As informações críticas da AWS ficam registradas em arquivos de auditoria.
+
+### Rastreabilidade
+
+As execuções passam a possuir evidências persistidas.
+
+### Governança
+
+Permite validar se os dados estão sendo armazenados corretamente antes da catalogação pelo AWS Glue.
+
+### Qualidade de Dados
+
+Confirma que a estrutura de particionamento esperada foi criada corretamente.
+
+---
 
 ### 🧠 Boas Práticas Aplicadas:
 
 ### Engenharia de Dados:
 
 - Separação entre camada raw e futuras camadas tratadas.
-- Armazenamento do payload bruto da API.
+- Armazenamento do payload refatorado da API.
 - Uso de particionamento no S3.
-- Inclusão futura de metadados de extração.
-- Preparação para catálogo de dados com Glue.
+- Inclusão de metadados de extração com Glue AWS
 - Estrutura compatível com consultas no Athena.
 
 ### Desenvolvimento:
@@ -298,17 +501,6 @@ O erro acima significa que o código tentou usar uma variável chamada **e**, ma
 - Lambda usará IAM Role para acessar o S3.
 - Permissões IAM devem seguir o princípio do menor privilégio.
 
-### 🗺️ Roadmap do Projeto
-Próximas etapas planejadas:
-
-- Criar camada Trusted utilizando Glue ETL.
-- Estruturar tabelas Iceberg em S3 Tables.
-- Implementar consultas analíticas na camada Trusted.
-- Automatizar validações de qualidade dos dados.
-- Criar dashboards com QuickSight.
-- Monitoramento com CloudWatch.
-
-### 📌 Status Atual:
 
 ## 📌 Status Atual
 
@@ -325,6 +517,92 @@ O projeto atualmente possui:
 - Consultas funcionando no Amazon Athena;
 - Payload serializado para evitar conflitos de schema;
 - Estrutura preparada para evolução para camadas Trusted e Refined.
+
+## 🚀 Quer executar o projeto e continuar?
+
+### 📌 1. Pré-requisitos 
+
+- Python 3.12+
+- Poetry instalado
+- Conta AWS ativa
+- AWS CLI configurado (`aws configure`)
+- Permissões para:
+  - AWS Lambda
+  - Amazon S3
+  
+  
+
+### 📌 2. Clonar o repositório
+
+```
+git clone https://github.com/seu-usuario/project_aws_clima.git
+cd project_aws_clima
+```
+
+### 📌 3. Instalar dependências com ou sem o poetry
+
+```
+poetry install
+```
+
+### 📌 4. Configurar variáveis de ambiente
+
+Crie um arquivo `.env` baseado no `.env.example`:
+
+```
+Exemplo:
+
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=meu-bucket-clima
+VISUAL_CROSSING_API_KEY=sua_chave_aqui
+```
+
+### 📌 5. Execução local (teste da API)
+
+```
+python scripts/test_visual_crossing_request.py
+```
+*A request e KEY são criadas pela IA da Visual Crossing no site oficial*
+
+## 📌 6. Deploy da Lambda 
+
+O deploy da função Lambda pode ser realizado de duas formas, dependendo das permissões disponíveis na conta AWS:
+
+---
+### 🔹 1. Deploy via AWS Console 
+
+Este é o método mais simples e não requer configuração local de IAM CLI.
+
+1. Acesse o serviço AWS Lambda no console
+2. Crie uma nova função (ou edite uma existente)
+3. Escolha runtime Python 3.12
+4. Configurar handler:
+   ``` lambda_function.lambda_handler```
+5. Definir variáveis de ambiente na Lambda
+
+---
+
+### 🔹 2. Deploy via AWS CLI 
+
+Este método requer permissões IAM adequadas configuradas localmente. E depois execute o comando.
+
+```
+python scripts/run_lambda_local.py
+```
+ou ``` python lambda_function.py ```
+
+## 📌 7. Configuração do S3 + Glue + Athena
+
+1. Criar bucket S3 para camada Raw
+2. Configurar serviço AWS Lambda ( tests e deploy )
+3. Configurar AWS Glue Crawler para catalogação dos metadados.
+4. Consultar os dados no AWS Athena.
+
+## 📌 8. Para validar as execuções é bom executar os comandos:
+
+```python scripts/aws_report.py```
+---
+``` python scripts/validation_ingestion_lambda```
 
 ## 👤 Autor:
 
