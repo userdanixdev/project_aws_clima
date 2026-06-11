@@ -13,7 +13,7 @@ WITH base AS (
 renamed AS (
 
     SELECT
-        md5(to_utf8(location)) AS id_cidade,
+        {{ dbt_utils.generate_surrogate_key(['location']) }} AS id_cidade,
 
         CAST(location_resolved AS VARCHAR) AS cidade,
 

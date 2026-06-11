@@ -13,9 +13,12 @@ models:
         description: Identificador padronizado da cidade.
         tests:
           - not_null
+          
 
       - name: cidade
         description: Nome da cidade conforme informado na ingestão.
+        tests:
+          - not_null
 
       - name: data
         description: Data da previsão meteorológica.
@@ -24,13 +27,13 @@ models:
 
       - name: temperatura
         description: Temperatura média do dia em graus Celsius.
-
+        
       - name: temperatura_max
         description: Temperatura máxima do dia em graus Celsius.
-
+        
       - name: temperatura_min
         description: Temperatura mínima do dia em graus Celsius.
-
+        
       - name: sensacao
         description: Sensação térmica média do dia.
 
@@ -42,13 +45,13 @@ models:
 
       - name: umidade
         description: Umidade relativa média do ar (%).
-
+        
       - name: precipitacao
         description: Volume total de precipitação em milímetros.
 
       - name: prob_precipitacao
         description: Probabilidade de precipitação (%).
-
+        
       - name: area_precipitada
         description: Percentual de cobertura da precipitação (%).
 
@@ -78,15 +81,14 @@ models:
 
       - name: fase_lua
         description: Valor numérico representando a fase da lua.
-
+        tests:
+          - not_null
+        
       - name: condicao
         description: Condição climática resumida.
 
       - name: descricao
         description: Descrição detalhada da condição meteorológica.
-
-      - name: fonte_dados
-        description: Fonte utilizada pela Visual Crossing.
 
       - name: load_datetime
         description: Timestamp da carga original do dado.
@@ -97,9 +99,11 @@ models:
           Fonte original informada pela API Visual Crossing. Para dados combinados 'comb'
           temos Dados combinados (observações reais + modelo meteorológico)
           Para 'fcst' temos Forecast ( previsão combinada )
-
+        
       - name: tipo_dado
         description: Classificação amigável do dado meteorológico (observado ou previsão).
-
+        
       - name: is_forecast
-        description: Indicador booleano que identifica registros de previsão meteorológica.          
+        description: Indicador booleano que identifica registros de previsão meteorológica.  
+        tests:
+          - not_null        
