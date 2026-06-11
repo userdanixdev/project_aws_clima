@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: stg_clima
+    description: >
+      Dados climáticos normalizados a partir do payload JSON da API
+      Visual Crossing. Cada linha representa uma previsão ou observação
+      diária para uma capital brasileira.
+
+    columns:
+
+      - name: id_cidade
+        description: Identificador padronizado da cidade.
+        tests:
+          - not_null
+
+      - name: cidade
+        description: Nome da cidade conforme informado na ingestão.
+
+      - name: data
+        description: Data da previsão meteorológica.
+        tests:
+          - not_null
+
+      - name: temperatura
+        description: Temperatura média do dia em graus Celsius.
+
+      - name: temperatura_max
+        description: Temperatura máxima do dia em graus Celsius.
+
+      - name: temperatura_min
+        description: Temperatura mínima do dia em graus Celsius.
+
+      - name: sensacao
+        description: Sensação térmica média do dia.
+
+      - name: sensacao_max
+        description: Sensação térmica máxima do dia.
+
+      - name: sensacao_min
+        description: Sensação térmica mínima do dia.
+
+      - name: umidade
+        description: Umidade relativa média do ar (%).
+
+      - name: precipitacao
+        description: Volume total de precipitação em milímetros.
+
+      - name: prob_precipitacao
+        description: Probabilidade de precipitação (%).
+
+      - name: area_precipitada
+        description: Percentual de cobertura da precipitação (%).
+
+      - name: rajada_vento
+        description: Velocidade máxima de rajada de vento (km/h).
+
+      - name: velocidade_vento
+        description: Velocidade média do vento (km/h).
+
+      - name: direcao_vento
+        description: Direção predominante do vento em graus.
+
+      - name: indice_uv
+        description: Índice ultravioleta máximo observado.
+
+      - name: cobertura_nuvens
+        description: Percentual médio de cobertura de nuvens.
+
+      - name: visibilidade
+        description: Distância média de visibilidade em quilômetros.
+
+      - name: nascer_sol
+        description: Horário do nascer do sol.
+
+      - name: por_sol
+        description: Horário do pôr do sol.
+
+      - name: fase_lua
+        description: Valor numérico representando a fase da lua.
+
+      - name: condicao
+        description: Condição climática resumida.
+
+      - name: descricao
+        description: Descrição detalhada da condição meteorológica.
+
+      - name: fonte_dados
+        description: Fonte utilizada pela Visual Crossing.
+
+      - name: load_datetime
+        description: Timestamp da carga original do dado.
+        tests:
+          - not_null
+      - name: fonte_dados
+        description: > 
+          Fonte original informada pela API Visual Crossing. Para dados combinados 'comb'
+          temos Dados combinados (observações reais + modelo meteorológico)
+          Para 'fcst' temos Forecast ( previsão combinada )
+
+      - name: tipo_dado
+        description: Classificação amigável do dado meteorológico (observado ou previsão).
+
+      - name: is_forecast
+        description: Indicador booleano que identifica registros de previsão meteorológica.          
