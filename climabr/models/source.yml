@@ -1,0 +1,37 @@
+version: 2
+
+sources:
+  - name: landing
+    description: Camada Raw contendo dados climáticos ingeridos da API Visual Crossing.
+    database: AwsDataCatalog
+    schema: landing
+
+    tables:
+      - name: clima
+        description: Dados brutos provenientes da API Visual Crossing.
+
+        columns:
+          - name: location_requested
+            description: Localização enviada na requisição para a API.
+
+          - name: location_resolved
+            description: Localização resolvida pela API após processamento.
+
+          - name: extraction_timestamp
+            description: Data e horário em que a ingestão foi realizada.
+            tests:
+              - not_null
+
+          - name: payload_json
+            description: Payload JSON completo retornado pela API.
+
+          - name: source
+            description: Sistema de origem dos dados.
+
+          - name: date
+            description: Data da ingestão dos dados.
+
+          - name: location
+            description: Identificador padronizado da capital brasileira.
+            tests:
+              - not_null
