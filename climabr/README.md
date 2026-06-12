@@ -1,6 +1,6 @@
-🌦️ climaBR — Pipeline de Transformação de Dados com dbt (AWS Athena)
+# 🌦️ climaBR — Pipeline de Transformação de Dados com dbt (AWS Athena)
 
-📌 Visão Geral
+## 📌 Visão Geral
 
 O climaBR é a camada de transformação do pipeline de dados climáticos da AWS.
 
@@ -98,13 +98,13 @@ O projeto garante qualidade com:
 
 1. Testes automáticos
 
-- not_null
-- accepted_values
+        - not_null
+        - accepted_values
 
 2. Regras de negócio
 
 
-- Consistência entre staging e intermediate
+        - Consistência entre staging e intermediate
 
 ## 🔍 Exemplo de Transformação:
 
@@ -115,14 +115,19 @@ CASE
   WHEN temperatura BETWEEN 10 AND 25 THEN 'ameno'
   ELSE 'quente'
 END AS faixa_temperatura
-🧪 Validação de CASE WHEN
-SELECT *
+```
+### Validação de CASE WHEN:
+```sql
+SELECT cidade,temperatura,faixa_temperatura
 FROM intermediate.int_clima_diario
 WHERE
   (temperatura < 10 AND faixa_temperatura <> 'frio')
   OR (temperatura BETWEEN 10 AND 25 AND faixa_temperatura <> 'ameno')
   OR (temperatura > 25 AND faixa_temperatura <> 'quente');
 ```
+### Validação da consulta no AWS Athena:
+
+![Validacao_athena](../docs/images/query_intermediate_example_athena.png)
 
 ## 🚀 Objetivos:
 
@@ -151,8 +156,8 @@ climaBR/
 ### 🏷️ Release:
 
 ```
-Versão atual: v0.1.4
-Próxima release: v0.1.5 (dbt quality & marts expansion)
+Versão atual: v0.1.5 - dbt Intermediate Laye
+Próxima release: v0.1.6 (dbt quality & marts expansion)
 ```
 
 ### 👨‍💻 Autor

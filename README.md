@@ -108,6 +108,7 @@ Para engenharia de dados, isso é útil porque facilita:
 ### 📁 Estrutura do Projeto:
 ```
 project_aws_clima/
+├── climabr/
 ├── docs/
 │   ├── images/
 │   └── troubleshooting.md
