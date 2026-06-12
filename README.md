@@ -1,5 +1,6 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![dbt](https://img.shields.io/badge/dbt-1.11-FF694B?logo=dbt&logoColor=white)
+![dbt Core](https://img.shields.io/badge/dbt-Core-orange)
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange)
 ![Amazon S3](https://img.shields.io/badge/Amazon-S3-green)
 ![AWS Glue](https://img.shields.io/badge/AWS-Glue-blue)
@@ -614,6 +615,88 @@ ou ``` python lambda_function.py ```
 ```python scripts/aws_report.py```
 ---
 ``` python scripts/validation_ingestion_lambda```
+
+## 🔄 Transformação de Dados com dbt
+
+Após a implementação da camada de ingestão e armazenamento na AWS, foi incorporado ao projeto um pipeline de transformação utilizando dbt (Data Build Tool) integrado ao Amazon Athena.
+
+### Objetivos da Camada de Transformação
+
+* Padronizar os dados climáticos ingeridos pela AWS Lambda.
+* Aplicar regras de limpeza e enriquecimento dos dados.
+* Implementar modelagem em camadas seguindo boas práticas de Analytics Engineering.
+* Garantir qualidade dos dados através de testes automatizados.
+* Preparar os dados para futuras camadas analíticas e dashboards.
+
+### Estrutura Implementada
+
+```text
+Landing
+   ↓
+Staging
+   ↓
+Intermediate
+   ↓
+Marts (futuro)
+```
+
+### Principais Implementações
+
+#### Landing Layer
+
+* Integração do dbt com Amazon Athena.
+* Configuração do catálogo AWS Glue.
+* Definição das fontes (`sources`) para os dados brutos armazenados no Data Lake.
+
+#### Staging Layer
+
+* Padronização de nomes de colunas.
+* Conversão de tipos de dados.
+* Criação de identificadores únicos para cidades.
+* Tratamento inicial de campos meteorológicos.
+
+#### Intermediate Layer
+
+* Consolidação dos dados climáticos.
+* Aplicação de regras de negócio.
+* Organização dos dados para consumo analítico.
+* Criação da modelagem `int_clima_diario`.
+
+### Qualidade e Governança
+
+Foram implementados testes utilizando dbt para validar:
+
+* Unicidade de chaves.
+* Valores nulos.
+* Integridade das tabelas.
+* Consistência das transformações.
+
+### Tecnologias Utilizadas:
+
+
+* dbt Core
+* dbt-athena
+* Amazon Athena
+* AWS Glue Data Catalog
+* Amazon S3
+
+
+### Evidências:
+
+- Execução bem-sucedida dos modelos (`dbt run`)
+
+[docs_droubleshooting](docs/troubleshooting.md)
+
+- Validação dos testes (`dbt test`)
+
+[docs_troubleshooting](docs/troubleshooting.md)
+
+- Consultas analíticas realizadas sobre a camada Intermediate via Amazon Athena
+
+![intermediate_quey](docs/images/intermediate_query.png)
+
+👉 Veja os detalhes da camada de transformação no diretório [climabr](climabr/).
+
 
 ## 👤 Autor:
 
