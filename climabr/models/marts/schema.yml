@@ -1,0 +1,163 @@
+version: 2
+
+models:
+  - name: fct_analise_mensal
+    description: >
+      Mart analítica mensal contendo indicadores climáticos agregados
+      por cidade e mês.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          argument: # Corrigido para o padrão singular aceito no dbt_utils
+            combination_of_columns:
+              - cidade
+              - mes
+
+    columns:
+      - name: cidade
+        description: Nome da cidade analisada.
+        data_tests:
+          - not_null
+
+      - name: mes
+        description: Primeiro dia do mês de referência.
+        data_tests:
+          - not_null
+
+      - name: dias_com_dados
+        description: Quantidade de registros disponíveis no mês.
+        data_tests:
+          - not_null
+
+      - name: media_temperatura
+        description: Temperatura média mensal.
+
+      - name: temperatura_maxima_mes
+        description: Maior temperatura registrada no mês.
+
+      - name: temperatura_minima_mes
+        description: Menor temperatura registrada no mês.
+
+      - name: media_sensacao
+        description: Sensação térmica média mensal.
+
+      - name: media_umidade
+        description: Umidade média mensal.
+
+      - name: media_precipitacao
+        description: Média diária de precipitação.
+
+      - name: precipitacao_total_mes
+        description: Volume total de precipitação acumulada no mês.
+
+      - name: media_precipitacao_esperada
+        description: Média mensal da precipitação esperada.
+
+      - name: dias_com_chuva
+        description: Quantidade de dias com chuva.
+
+      - name: media_horas_sol
+        description: Média diária de horas de sol.
+
+      - name: media_uv
+        description: Índice UV médio mensal.
+
+      - name: uv_maximo_mes
+        description: Maior índice UV observado no mês.
+
+      - name: velocidade_media_vento
+        description: Velocidade média do vento.
+
+      - name: rajada_maxima_mes
+        description: Maior rajada de vento registrada.
+
+      - name: media_cobertura_nuvens
+        description: Cobertura média de nuvens.
+
+      - name: media_visibilidade
+        description: Visibilidade média observada.
+
+      - name: media_prob_precipitacao
+        description: Probabilidade média de precipitação.
+
+      - name: media_amplitude_termica
+        description: Média da amplitude térmica.
+
+      - name: score_climatico_medio
+        description: Score climático médio do mês.
+
+      - name: dias_alerta_uv
+        description: Quantidade de dias com alerta UV.
+
+      - name: dias_alerta_calor
+        description: Quantidade de dias com alerta de calor.
+
+      - name: dias_alerta_vento
+        description: Quantidade de dias com alerta de vento.
+
+      - name: condicao_mais_frequente
+        description: Condição climática predominante no mês.
+
+      - name: lua_mais_comum
+        description: Fase da lua predominante no mês.
+
+      - name: faixa_temperatura_predominante
+        description: Faixa de temperatura predominante.
+
+      - name: faixa_uv_predominante
+        description: Faixa de índice UV predominante.
+
+  - name: fct_desvio_previsao
+    description: >
+      Tabela fato responsável por medir os desvios entre os dados
+      previstos (fcst) e os dados observados (comb). Cada linha
+      representa uma cidade e uma data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          argument:
+            combination_of_columns:
+              - cidade
+              - data
+
+    columns:
+      - name: cidade
+        description: Cidade utilizada na comparação.
+        data_tests:
+          - not_null
+
+      - name: data
+        description: Data de referência da comparação.
+        data_tests:
+          - not_null
+
+      - name: desvio_temperatura
+        description: Diferença entre temperatura prevista e observada.
+
+      - name: desvio_sensacao
+        description: Diferença entre sensação térmica prevista e observada.
+
+      - name: desvio_umidade
+        description: Diferença entre umidade prevista e observada.
+
+      - name: desvio_precipitacao
+        description: Diferença entre precipitação prevista e observada.
+
+      - name: desvio_uv
+        description: Diferença entre índice UV previsto e observado.
+
+      - name: desvio_velocidade_vento
+        description: Diferença entre velocidade do vento prevista e observada.
+
+      - name: desvio_visibilidade
+        description: Diferença entre visibilidade prevista e observada.
+
+      - name: desvio_cobertura_nuvens
+        description: Diferença entre cobertura de nuvens prevista e observada.
+
+      - name: desvio_amplitude_termica
+        description: Diferença entre amplitude térmica prevista e observada.
+
+      - name: desvio_horas_sol
+        description: Diferença entre horas de sol previstas e observadas.
+
+      - name: desvio_precipitacao_esperada
+        description: Diferença entre precipitação esperada prevista e observada.
