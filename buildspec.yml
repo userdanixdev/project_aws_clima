@@ -49,10 +49,11 @@ phases:
   build:
     commands:
         - echo "=== BUILD ==="
-        - cd climabr && poetry run dbt --version
-        - cd climabr && poetry run dbt build
-        - cd climabr && poetry run dbt docs generate
-        - test -f climabr/target/index.html
+        - cd climabr 
+        - poetry run dbt --version
+        - poetry run dbt build
+        - poetry run dbt docs generate
+        - test -f target/index.html
         - echo "Adicionando data de atualização no HTML..."
         - |
           BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
@@ -62,14 +63,14 @@ phases:
     commands:
         - echo "=== POST-BUILD ==="
         - echo "Copiando para ${S3_DOCS_DIR}..."
-        - aws s3 sync climabr/target/ ${S3_DOCS_DIR} --delete
+        - aws s3 sync target/ ${S3_DOCS_DIR} --delete
 artifacts:
   files:
-    - climabr/target/**/*
-    - climabr/logs/**/*
+    - target/**/*
+    - logs/**/*
   discard-paths: no
 cache:
   paths:
-    - 'climabr/root/.cache/pip/**/*'          
-    - 'climabr/root/.cache/pypoetry/**/*'
+    - 'root/.cache/pip/**/*'          
+    - 'root/.cache/pypoetry/**/*'
   
