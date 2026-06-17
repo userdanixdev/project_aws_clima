@@ -2,7 +2,7 @@ version: 2
 
 macros:
   - name: generate_schema_name
-    description: "{{ doc('generate_schema_name') }}"
+    description: "Macro responsável por definir dinamicamente o schema dos modelos dbt."
     arguments:
       - name: custom_schema_name
         type: string
@@ -12,7 +12,7 @@ macros:
         description: "Representa o nó do modelo dentro do dbt, contendo metadados como schema e nome do modelo."
   
   - name: classify_moon_phase
-    description: "{{ doc('classify_moon_phase') }}"
+    description: "Classifica o valor numérico da fase da lua retornado pela WeatherAPI."
     arguments:
       - name: moonphase_value
         type: float
