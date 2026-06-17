@@ -1,0 +1,72 @@
+version: 0.2
+env:
+  variables:
+    DBT_DATABASE: AwsDataCatalog
+    DBT_SCHEMA: landing
+    S3_STAGING_DIR: s3://amazon-s3-clima-project-442767638718-us-east-2-an/metadata/
+    S3_DATA_DIR: s3://amazon-s3-clima-project-442767638718-us-east-2-an/tables/
+    S3_DOCS_DIR: s3://www.climabr.com.br
+    AWS_REGION: us-east-2
+    
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - echo "=== INSTALL ==="      
+      - python --version
+      - pip install --upgrade pip
+      - pip install poetry
+      - poetry --version
+      - poetry install --no-interaction
+      
+
+  pre_build:
+      commands:
+        - mkdir -p ~/.dbt
+        - echo "-- PRE-BUILD --"      
+        - echo "Gerando profiles.yml para produção"
+        - |
+          cat > ~/.dbt/profiles.yml <<EOF
+          climabr:
+            target: prod
+            outputs:
+              prod:
+                type: athena
+                database: ${DBT_DATABASE}
+                region_name: ${AWS_REGION}
+                schema: ${DBT_SCHEMA}
+                s3_staging_dir: ${S3_STAGING_DIR}
+                s3_data_dir: ${S3_DATA_DIR}
+                threads: 4
+          EOF
+        - echo "Validando profile dbt..."
+        - cat ~/.dbt/profiles.yml
+        - poetry run dbt debug                 
+  build:
+    commands:
+        - echo "=== BUILD ==="
+        - poetry run dbt --version
+        - poetry run dbt build
+        - poetry run dbt docs generate
+        - test -f target/index.html
+        - echo "Adicionando data de atualização no HTML..."
+        - |
+          BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
+          sed -i "/<\/body>/i <p style='text-align:center;font-size:14px;'>Última atualização em: ${BUILD_DATE}</p>" target/index.html
+
+  post_build:
+    commands:
+        - echo "=== POST-BUILD ==="
+        - echo "Copiando para ${S3_DOCS_DIR}..."
+        - aws s3 sync target/ ${S3_DOCS_DIR} --delete
+artifacts:
+  files:
+    - target/**/*
+    - logs/**/*
+  discard-paths: no
+cache:
+  paths:
+    - '/root/.cache/pip/**/*'          
+    - '/root/.cache/pypoetry/**/*'
+  
