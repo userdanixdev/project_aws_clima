@@ -18,7 +18,7 @@ phases:
       - pip install --upgrade pip
       - pip install poetry
       - poetry --version
-      - poetry install --no-interaction
+      - poetry install --no-interaction --no-root
       
 
   pre_build:
