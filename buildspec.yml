@@ -57,7 +57,7 @@ phases:
         - echo "Adicionando data de atualização no HTML..."
         - |
           BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
-          sed -i "/<\/body>/i <p style='text-align:center;font-size:14px;'>Última atualização em: ${BUILD_DATE}</p>" climabr/target/index.html
+          sed -i "/<\/body>/i <p style='text-align:center;font-size:14px;'>Última atualização em: ${BUILD_DATE}</p>" target/index.html
 
   post_build:
     commands:
