@@ -45,7 +45,7 @@ phases:
           EOF
         - echo "Validando profile dbt..."
         - cat ~/.dbt/profiles.yml
-        - cd climabr && poetry run dbt debug          
+        #- cd climabr && poetry run dbt debug          
   build:
     commands:
         - echo "=== BUILD ==="
