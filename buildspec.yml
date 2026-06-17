@@ -23,6 +23,9 @@ phases:
 
   pre_build:
       commands:
+        - pwd
+        - ls -la
+        - find . -maxdepth 2 -type d
         - mkdir -p ~/.dbt
         - echo "-- PRE-BUILD --"      
         - echo "Gerando profiles.yml para produção"
