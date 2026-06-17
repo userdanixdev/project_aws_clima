@@ -10,15 +10,22 @@ O projeto segue arquitetura moderna de ETL (Extract → Transform → Load).
 
 ### 🏗️ Arquitetura do Pipeline:
 ```
+Visual Crossing API
+        ↓
 AWS Lambda (Ingestão)
         ↓
 S3 (Landing / Raw Data)
         ↓
+AWS Glue Catalog
+        ↓                
 dbt (Transformações)
         ↓
 Athena (Query Engine)
         ↓
-Intermediate Models → Marts (Analytics Layer)
+dbt Core 
+├── Staging
+├── Intermediate 
+└── Marts
 ```
 
 ## 🧱 Camadas de Dados:
@@ -44,11 +51,52 @@ Dados brutos vindos da AWS Lambda, sem transformação e base histórica no S3.
 
 ```Exemplo: int_clima_diario```
 
-### 📊 Marts (futuro):
+### 📊 Marts:
 
+Camada analítica orientada ao consumo.
+
+```fct_analise_mensal```
+
+Tabela fato contendo agregações climáticas mensais por cidade.
+
+```fct_desvio_previsao```
+
+Tabela fato utilizada para análise de qualidade da previsão meteorológica.
 - Camada final para BI
 - KPIs e métricas agregadas
 - Dataset pronto para dashboards
+
+### 📊 Métricas Implementadas
+
+- Temperatura
+- Temperatura média diária
+- Temperatura máxima
+- Temperatura mínima
+- Amplitude térmica
+- Sensação Térmica
+- Sensação térmica média
+- Diferença entre sensação térmica e temperatura observada
+- Umidade
+- Umidade média
+- Variação de umidade
+- Precipitação
+- Precipitação diária
+- Precipitação acumulada
+- Dias com chuva
+- Radiação Solar
+- Índice UV médio
+- Horas de sol
+- Vento
+- Velocidade média
+- Rajada máxima
+- Cobertura Atmosférica
+- Cobertura média de nuvens
+- Visibilidade média
+- Qualidade da Previsão
+- Desvio entre previsto e realizado
+- Erro Absoluto Médio (MAE)
+- Erro Percentual
+- Acurácia da previsão
 
 ### ⚙️ Tecnologias:
 
@@ -86,6 +134,7 @@ Por camada:
 ```
 dbt run --select staging
 dbt run --select intermediate
+dbt run --select mart
 ```
 
 4. Executar testes
@@ -137,6 +186,14 @@ WHERE
 - Criar base sólida para BI e análises
 
 ---
+## Validação da consulta no AWS Athena para camada Marts:
+### Ranking 3 de cidades com temperaturas mais quentes:
+
+![Temperatura_mais_quentes_brasil](../docs/images/ranking_temp_quentes_marts.png)
+
+### Ranking 3 das cidades com temperaturas mais quentes e outras métricas:
+
+![Temperatura_quente_outros_dados](../docs/images/marts_ranking_temp.png)
 
 ### 📁 Estrutura:
 ```
@@ -152,17 +209,20 @@ climaBR/
 ├── dbt_project.yml
 └── README.md
 ```
+### 📖 Documentação
+
+A documentação completa do projeto é gerada através do dbt Docs.
+
+poetry run dbt docs generate
+poetry run dbt docs serve
 
 ### 🏷️ Release:
 
 ```
-Versão atual: v0.1.5 - dbt Intermediate Laye
-Próxima release: v0.1.6 (dbt quality & marts expansion)
+Release Atual: v0.1.6 (dbt quality & marts expansion)
 ```
 
-### 👨‍💻 Autor
-
-Pipeline de dados desenvolvido com foco em engenharia de dados moderna na AWS utilizando dbt, Athena e boas práticas de modelagem ELT.
+*Pipeline de dados desenvolvido com foco em engenharia de dados moderna na AWS utilizando dbt, Athena e boas práticas de modelagem ELT.*
 
 ### ⭐ Destaques do Projeto:
 
@@ -171,3 +231,9 @@ Pipeline de dados desenvolvido com foco em engenharia de dados moderna na AWS ut
 - Regras de negócio auditáveis
 - Testes automatizados com dbt
 - Pronto para escala em produção
+
+### 👨‍💻 Autor
+
+- Daniel Martins
+
+**Engenharia de Dados | AWS | dbt | Athena**
