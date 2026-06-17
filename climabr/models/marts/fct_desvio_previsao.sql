@@ -1,4 +1,4 @@
-{{config(materialized='table',schema='marts')}}
+
 
 WITH base AS (
     SELECT * FROM {{ref('int_clima_diario')}}
@@ -50,7 +50,7 @@ pivotado AS (
         MAX(CASE WHEN fonte_dados = 'fcst' THEN precipitacao END) AS precipitacao_fcst,
         MAX(CASE WHEN fonte_dados = 'comb' THEN precipitacao END) AS precipitacao_comb,
 
-        MAX(CASE WHEN fonte_dados = 'fcst' THEN indice_uv END) AS indice_uv_fsct,
+        MAX(CASE WHEN fonte_dados = 'fcst' THEN indice_uv END) AS indice_uv_fcst,
         MAX(CASE WHEN fonte_dados = 'comb' THEN indice_uv END) AS indice_uv_comb,
 
         MAX(CASE WHEN fonte_dados = 'fcst' THEN velocidade_vento END) AS velocidade_vento_fcst,
@@ -69,7 +69,7 @@ pivotado AS (
         MAX(CASE WHEN fonte_dados = 'comb' THEN horas_sol END) AS horas_sol_comb,
 
         MAX(CASE WHEN fonte_dados = 'fcst' THEN precipitacao_esperada END) AS precipitacao_esperada_fcst,
-        MAX(CASE WHEN fonte_dados = 'comb' THEN precipitacao_esperada END) AS precipitacao_esperada_comb,
+        MAX(CASE WHEN fonte_dados = 'comb' THEN precipitacao_esperada END) AS precipitacao_esperada_comb
 
     FROM separado
     GROUP BY
@@ -84,14 +84,14 @@ desvios AS (
         ROUND(temperatura_fcst - temperatura_comb, 2) AS desvio_temperatura,
         ROUND(sensacao_fcst - sensacao_comb, 2) AS desvio_sensacao, 
         ROUND(umidade_fcst - umidade_comb, 2) AS desvio_umidade,
-        ROUND(precipitacao_fcst - precipitacao_comb, 2) AS desvio_precipitacao, 
-        ROUND(uv_fcst - uv_comb, 2) AS desvio_uv,
-        ROUND(vento_fcst - vento_comb, 2) AS desvio_velocidade_vento,
+        ROUND(precipitacao_esperada_fcst - precipitacao_esperada_comb, 2) AS desvio_precipitacao_esperada, 
+        ROUND(indice_uv_fcst - indice_uv_comb, 2) AS desvio_uv,
+        ROUND(velocidade_vento_fcst  - velocidade_vento_comb, 2) AS desvio_velocidade_vento,
         ROUND(visibilidade_fcst - visibilidade_comb, 2) AS desvio_visibilidade,
-        ROUND(nuvens_fcst - nuvens_comb, 2) AS desvio_cobertura_nuvens, 
-        ROUND(amplitude_fcst - amplitude_comb, 2) AS desvio_amplitude_termica, 
-        ROUND(horas_sol_fcst - horas_sol_comb, 2) AS desvio_horas_sol,
-        ROUND( precipitacao_esp_fcst - precipitacao_esp_comb, 2 ) AS desvio_precipitacao_esperada
+        ROUND(cobertura_nuvens_fcst - cobertura_nuvens_comb, 2) AS desvio_cobertura_nuvens, 
+        ROUND(amplitude_termica_fcst - amplitude_termica_comb, 2) AS desvio_amplitude_termica, 
+        ROUND(horas_sol_fcst - horas_sol_comb, 2) AS desvio_horas_sol
+        
     FROM pivotado
 
     WHERE temperatura_fcst IS NOT NULL AND temperatura_comb IS NOT NULL        

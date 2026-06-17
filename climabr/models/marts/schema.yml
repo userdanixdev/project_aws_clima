@@ -6,8 +6,7 @@ models:
       Mart analítica mensal contendo indicadores climáticos agregados
       por cidade e mês.
     data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          argument: # Corrigido para o padrão singular aceito no dbt_utils
+      - dbt_utils.unique_combination_of_columns:          
             combination_of_columns:
               - cidade
               - mes
@@ -112,8 +111,7 @@ models:
       previstos (fcst) e os dados observados (comb). Cada linha
       representa uma cidade e uma data.
     data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          argument:
+      - dbt_utils.unique_combination_of_columns:          
             combination_of_columns:
               - cidade
               - data

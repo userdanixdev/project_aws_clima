@@ -17,6 +17,8 @@ test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+docs-paths: ["docs"]
+  
 
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
@@ -37,4 +39,7 @@ models:
       +schema: staging
     intermediate:
       +materialized: view
-      +schema: intermediate      
+      +schema: intermediate     
+    marts:
+      +materialized: table
+      +schema: marts       
