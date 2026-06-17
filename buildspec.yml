@@ -42,31 +42,31 @@ phases:
           EOF
         - echo "Validando profile dbt..."
         - cat ~/.dbt/profiles.yml
-        - poetry run dbt debug                 
+        - cd climabr && poetry run dbt debug          
   build:
     commands:
         - echo "=== BUILD ==="
-        - poetry run dbt --version
-        - poetry run dbt build
-        - poetry run dbt docs generate
-        - test -f target/index.html
+        - cd climabr && poetry run dbt --version
+        - cd climabr && poetry run dbt build
+        - cd climabr && poetry run dbt docs generate
+        - test -f climabr/target/index.html
         - echo "Adicionando data de atualização no HTML..."
         - |
           BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
-          sed -i "/<\/body>/i <p style='text-align:center;font-size:14px;'>Última atualização em: ${BUILD_DATE}</p>" target/index.html
+          sed -i "/<\/body>/i <p style='text-align:center;font-size:14px;'>Última atualização em: ${BUILD_DATE}</p>" climabr/target/index.html
 
   post_build:
     commands:
         - echo "=== POST-BUILD ==="
         - echo "Copiando para ${S3_DOCS_DIR}..."
-        - aws s3 sync target/ ${S3_DOCS_DIR} --delete
+        - aws s3 sync climabr/target/ ${S3_DOCS_DIR} --delete
 artifacts:
   files:
-    - target/**/*
-    - logs/**/*
+    - climabr/target/**/*
+    - climabr/logs/**/*
   discard-paths: no
 cache:
   paths:
-    - '/root/.cache/pip/**/*'          
-    - '/root/.cache/pypoetry/**/*'
+    - 'climabr/root/.cache/pip/**/*'          
+    - 'climabr/root/.cache/pypoetry/**/*'
   
