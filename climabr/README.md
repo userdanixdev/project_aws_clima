@@ -1,4 +1,4 @@
-# 🌦️ climaBR — Pipeline de Transformação de Dados com dbt (AWS Athena)
+# 🌦️ climaBR - Pipeline de Transformação de Dados com dbt + AWS Athena
 
 ## 📌 Visão Geral
 
