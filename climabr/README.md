@@ -216,6 +216,10 @@ A documentação completa do projeto é gerada através do dbt Docs.
 poetry run dbt docs generate
 poetry run dbt docs serve
 
+### Deploy do dbt:
+
+![Deploy_dbt](../docs/images/deploy_dbt.png)
+
 ### 🏷️ Release:
 
 ```
