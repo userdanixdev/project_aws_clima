@@ -60,9 +60,9 @@ phases:
           cat > merge_docs.py << 'EOF'
           import os
           import json
+          import re
 
-          # Como demos 'cd climabr', a pasta target está logo aqui
-          target_dir = "target"
+          target_dir = os.path.join(os.environ['CODEBUILD_SRC_DIR'], 'climabr', 'target')
           
           print("Lendo arquivos do dbt...")
           with open(os.path.join(target_dir, "index.html"), "r", encoding="utf-8") as f:
@@ -72,14 +72,12 @@ phases:
           with open(os.path.join(target_dir, "catalog.json"), "r", encoding="utf-8") as f:
               catalog = json.load(f)
 
-          search_manifest = 'OAG_MANIFEST = undefined;'
-          new_manifest = f'OAG_MANIFEST = {json.dumps(manifest)};'
-          search_catalog = 'OAG_CATALOG = undefined;'
-          new_catalog = f'OAG_CATALOG = {json.dumps(catalog)};'
+          # Regex que encontra OAG_MANIFEST independente de espaços ou se usa aspas/undefined
+          # e substitui pelo JSON completo envolvido na atribuição correta
+          html = re.sub(r'OAG_MANIFEST\s*=\s*[^;]+;', f'OAG_MANIFEST = {json.dumps(manifest)};', html)
+          html = re.sub(r'OAG_CATALOG\s*=\s*[^;]+;', f'OAG_CATALOG = {json.dumps(catalog)};', html)
 
-          print("Injetando manifest.json e catalog.json dentro do index.html...")
-          html = html.replace(search_manifest, new_manifest).replace(search_catalog, new_catalog)
-
+          print("Gravando arquivo final consolidado...")
           with open(os.path.join(target_dir, "index_inline.html"), "w", encoding="utf-8") as f:
               f.write(html)
           print("Arquivo index_inline.html gerado com sucesso!")
