@@ -52,7 +52,7 @@ phases:
         - cd climabr 
         - poetry run dbt --version
         - poetry run dbt build
-        - poetry run dbt docs generate --single-file
+        - poetry run dbt docs generate 
         - test -f target/index.html
         - echo "Adicionando data de atualização no HTML..."
         - |
