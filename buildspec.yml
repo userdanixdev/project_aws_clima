@@ -54,13 +54,13 @@ phases:
         - poetry run dbt build
         - poetry run dbt docs generate 
         - test -f target/index.html
-        # --- SOLUÇÃO ROBUSTA: Criando o script inline diretamente ---
-        - echo "Criando script para unificar o HTML..."
+        - rm -f merge_docs.py target/index_inline.html
+        
+        - echo "Criando script de unificação robusto com replace puro..."
         - |
           cat > merge_docs.py << 'EOF'
           import os
           import json
-          import re
 
           target_dir = os.path.join(os.environ['CODEBUILD_SRC_DIR'], 'climabr', 'target')
           
@@ -72,17 +72,27 @@ phases:
           with open(os.path.join(target_dir, "catalog.json"), "r", encoding="utf-8") as f:
               catalog = json.load(f)
 
-          # Regex que encontra OAG_MANIFEST independente de espaços ou se usa aspas/undefined
-          # e substitui pelo JSON completo envolvido na atribuição correta
-          html = re.sub(r'OAG_MANIFEST\s*=\s*[^;]+;', f'OAG_MANIFEST = {json.dumps(manifest)};', html)
-          html = re.sub(r'OAG_CATALOG\s*=\s*[^;]+;', f'OAG_CATALOG = {json.dumps(catalog)};', html)
+          print("Convertendo JSONs para texto...")
+          manifest_json_str = json.dumps(manifest)
+          catalog_json_str = json.dumps(catalog)
 
-          print("Gravando arquivo final consolidado...")
+          print("Injetando dados via replace (seguro contra escapes)...")
+          
+          # Tentativa 1: Caso o dbt use var ou let com espaços padrão
+          html = html.replace('OAG_MANIFEST = undefined;', f'OAG_MANIFEST = {manifest_json_str};')
+          html = html.replace('OAG_CATALOG = undefined;', f'OAG_CATALOG = {catalog_json_str};')
+          
+          # Tentativa 2: Caso o dbt gere sem espaços (OAG_MANIFEST=undefined;)
+          html = html.replace('OAG_MANIFEST=undefined;', f'OAG_MANIFEST={manifest_json_str};')
+          html = html.replace('OAG_CATALOG=undefined;', f'OAG_CATALOG={catalog_json_str};')
+
+          print("Gravando arquivo index_inline.html...")
           with open(os.path.join(target_dir, "index_inline.html"), "w", encoding="utf-8") as f:
               f.write(html)
           print("Arquivo index_inline.html gerado com sucesso!")
           EOF
         
+               
         # Executa o script que acabamos de criar
         - python merge_docs.py
         - echo "Adicionando data de atualização no HTML..."
