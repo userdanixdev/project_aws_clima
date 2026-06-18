@@ -60,6 +60,7 @@ phases:
   post_build:
     commands:
         - echo "=== POST-BUILD ==="
+        - cd climabr
         - echo "Copiando para ${S3_DOCS_DIR}..."
         - aws s3 sync target/ ${S3_DOCS_DIR} --delete 
         - echo "Corrigindo os formatos (Content-Type) para o navegador não bloquear..."
@@ -70,8 +71,8 @@ phases:
         
 artifacts:
   files:
-    - target/**/*
-    - logs/**/*
+    - climabr/target/**/*
+    - climabr/logs/**/*
   discard-paths: no
 cache:
   paths:
