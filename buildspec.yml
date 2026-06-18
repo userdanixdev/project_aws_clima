@@ -52,7 +52,7 @@ phases:
         - cd climabr 
         - poetry run dbt --version
         - poetry run dbt build
-        - poetry run dbt docs generate
+        - poetry run dbt docs generate --single-file
         - test -f target/index.html
         - echo "Adicionando data de atualização no HTML..."
         - |
@@ -63,7 +63,7 @@ phases:
     commands:
         - echo "=== POST-BUILD ==="
         - echo "Copiando para ${S3_DOCS_DIR}..."
-        - aws s3 sync target/ ${S3_DOCS_DIR} --delete
+        - aws s3 cp target/index.html ${S3_DOCS_DIR}/index.html
 artifacts:
   files:
     - target/**/*
