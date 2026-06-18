@@ -54,11 +54,37 @@ phases:
         - poetry run dbt build
         - poetry run dbt docs generate 
         - test -f target/index.html
-        # --- ESSA LINHA BAIXA O SCRIPT QUE JUNTA OS ARQUIVOS ---
-        - curl https://raw.githubusercontent.com/atbouchard/dbt-docs-inline/main/dbt_docs_inline.py -o dbt_docs_inline.py
+        # --- SOLUÇÃO ROBUSTA: Criando o script inline diretamente ---
+        - echo "Criando script para unificar o HTML..."
+        - |
+          cat > merge_docs.py << 'EOF'
+          import os
+          import json
+
+          target_dir = "target"
+          
+          with open(os.path.join(target_dir, "index.html"), "r", encoding="utf-8") as f:
+              html = f.read()
+          with open(os.path.join(target_dir, "manifest.json"), "r", encoding="utf-8") as f:
+              manifest = json.load(f)
+          with open(os.path.join(target_dir, "catalog.json"), "r", encoding="utf-8") as f:
+              catalog = json.load(f)
+
+          
+          search_manifest = 'OAG_MANIFEST = undefined;'
+          new_manifest = f'OAG_MANIFEST = {json.dumps(manifest)};'
+          search_catalog = 'OAG_CATALOG = undefined;'
+          new_catalog = f'OAG_CATALOG = {json.dumps(catalog)};'
+
+          html = html.replace(search_manifest, new_manifest).replace(search_catalog, new_catalog)
+
+          with open(os.path.join(target_dir, "index_inline.html"), "w", encoding="utf-8") as f:
+              f.write(html)
+          print("HTML unificado com sucesso!")
+          EOF
         
-        # --- ESSA LINHA PEGA O SEU CATALOG/MANIFEST E INJETA DENTRO DO HTML ---
-        - python dbt_docs_inline.py --target-dir target
+        # Executa o script que acabamos de criar
+        - python merge_docs.py
         - echo "Adicionando data de atualização no HTML..."
         - |
           BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
