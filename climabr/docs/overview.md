@@ -1,7 +1,5 @@
 {% docs overview %}
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)![dbt](https://img.shields.io/badge/dbt-Core-orange)![Athena](https://img.shields.io/badge/Amazon-Athena-purple)![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-yellow)
-
 # 🌤️ Projeto ClimaBR - Pipeline de Dados Meteorológicos na AWS
 
 O ClimaBR é um projeto de Engenharia de Dados desenvolvido para coletar, transformar e analisar dados meteorológicos históricos e de previsão utilizando uma arquitetura moderna baseada em AWS, dbt e Amazon Athena.
