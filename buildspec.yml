@@ -54,6 +54,11 @@ phases:
         - poetry run dbt build
         - poetry run dbt docs generate 
         - test -f target/index.html
+        # --- ESSA LINHA BAIXA O SCRIPT QUE JUNTA OS ARQUIVOS ---
+        - curl https://raw.githubusercontent.com/atbouchard/dbt-docs-inline/main/dbt_docs_inline.py -o dbt_docs_inline.py
+        
+        # --- ESSA LINHA PEGA O SEU CATALOG/MANIFEST E INJETA DENTRO DO HTML ---
+        - python dbt_docs_inline.py --target-dir target
         - echo "Adicionando data de atualização no HTML..."
         - |
           BUILD_DATE=$(TZ=America/Sao_Paulo date +"%d/%m/%Y às %H:%M")  
