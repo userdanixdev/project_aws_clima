@@ -62,6 +62,11 @@ phases:
         - echo "=== POST-BUILD ==="
         - echo "Copiando para ${S3_DOCS_DIR}..."
         - aws s3 sync target/ ${S3_DOCS_DIR} --delete 
+        - echo "Corrigindo os formatos (Content-Type) para o navegador não bloquear..."
+        - aws s3 cp target/index.html ${S3_DOCS_DIR}/index.html --content-type "text/html" --metadata-directive REPLACE
+        - aws s3 cp target/manifest.json ${S3_DOCS_DIR}/manifest.json --content-type "application/json" --metadata-directive REPLACE
+        - aws s3 cp target/catalog.json ${S3_DOCS_DIR}/catalog.json --content-type "application/json" --metadata-directive REPLACE
+        - aws s3 cp target/run_results.json ${S3_DOCS_DIR}/run_results.json --content-type "application/json" --metadata-directive REPLACE
         
 artifacts:
   files:
