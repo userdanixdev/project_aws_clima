@@ -63,8 +63,8 @@ phases:
     commands:
         - echo "=== POST-BUILD ==="
         - echo "Copiando para ${S3_DOCS_DIR}..."
-        - aws s3 sync target/ ${S3_DOCS_DIR} --delete --content-type "application/json" --exclude "index.html"
-        - aws s3 cp target/index.html ${S3_DOCS_DIR}/index.html --content-type "text/html"
+        - aws s3 sync target/ ${S3_DOCS_DIR} --delete --content-type "application/json" --exclude "index.html" --acl public-read
+        - aws s3 cp target/index.html ${S3_DOCS_DIR}/index.html --content-type "text/html" --acl public-read
 artifacts:
   files:
     - target/**/*
