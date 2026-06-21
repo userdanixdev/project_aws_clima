@@ -715,7 +715,37 @@ Intermediate
 
 👉 Veja os detalhes da camada de transformação no diretório [climabr](climabr/).
 
+---
 
+## 🚀 Evolução do Projeto
+
+O **project_aws_clima** está em constante evolução, seguindo uma abordagem incremental com entregas versionadas e documentadas.
+
+Cada release registra novas funcionalidades, melhorias na arquitetura, correções de bugs e avanços na automação do pipeline de dados na AWS.
+
+---
+
+## 📈 Histórico de Releases
+
+O **project_aws_clima** é desenvolvido de forma incremental, com cada entrega registrada e documentada através de releases.
+
+As versões publicadas demonstram a evolução da arquitetura, automações AWS, qualidade dos dados, observabilidade e boas práticas de Engenharia de Dados.
+
+### 🚀 Releases:
+
+- [v0.1.0 - Initial Weather Data Pipeline Setup](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.0)
+- [v0.1.1 - Refatoração da camada Raw e melhorias de compatibilidade com Glue e Athena](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.1)
+- [v0.1.2 - AWS Audit and Ingestion Validation](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.2)
+- [v0.1.3 - dbt-athena Environment Report](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.3)
+- [v0.1.4 - dbt init, landing, staging layers implementation](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.4)
+- [v0.1.5 - dbt Intermediate Layer](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.5)
+- [v0.1.6 - Camada Mart (Analítica e Métricas Climáticas)](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.6)
+- [v0.1.7 - Pipeline para ClimaBR via AWS CodeBuild](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.7)
+
+🔗 Consulte também a página completa de releases:
+https://github.com/userdanixdev/project_aws_clima/releases
+
+> Cada release representa uma etapa da construção do projeto, evidenciando a evolução contínua da solução e a aplicação prática de conceitos de Engenharia de Dados na AWS.
 
 ## 👤 Autor:
 
