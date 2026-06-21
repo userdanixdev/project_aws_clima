@@ -25,22 +25,24 @@
 ---
 # 🌦️ Project AWS Clima
 
-Projeto de engenharia de dados para coleta, ingestão e armazenamento de dados climáticos utilizando **Python**, **Visual Crossing Weather API**, **AWS Lambda** e **Amazon S3**.
+Pipeline de Engenharia de Dados e Analytics Engineering para coleta, armazenamento, transformação e disponibilização de dados climáticos utilizando serviços AWS e dbt.
 
-Este projeto está sendo desenvolvido com foco em boas práticas de engenharia de dados, versionamento, organização de ambiente, segurança de credenciais e preparação para construção de um pipeline completo em nuvem.
-
+O projeto implementa uma arquitetura moderna baseada em Data Lake, permitindo a ingestão automatizada de dados meteorológicos, transformação analítica e disponibilização de métricas para consumo em ferramentas de BI e análises exploratórias.
 ---
 
 ## 🎯 Objetivo do Projeto
 
 O objetivo principal é construir um pipeline de dados climáticos capaz de:
 
-- consumir dados de uma API meteorológica;
-- validar a requisição localmente;
-- executar a ingestão em uma função AWS Lambda;
-- armazenar os dados brutos no Amazon S3;
-- organizar os arquivos com particionamento;
-- preparar a base para consultas futuras com AWS Glue, Athena ou Spark.
+- Coletar dados meteorológicos de APIs externas;
+- Realizar ingestão automatizada via AWS Lambda;
+- Armazenar dados brutos em Amazon S3;
+- Catalogar dados utilizando AWS Glue Data Catalog;
+- Consultar dados através do Amazon Athena;
+- Transformar dados utilizando dbt Core;
+- Aplicar testes e validações de qualidade;
+- Disponibilizar datasets analíticos para consumo;
+- Gerar documentação automática dos modelos.
 
 A primeira etapa do projeto foca na camada **raw/bronze**, onde os dados são armazenados próximos ao formato original retornado pela API.
 
@@ -94,51 +96,82 @@ Para engenharia de dados, isso é útil porque facilita:
 
 ### 🛠️ Tecnologias Utilizadas:
 
-- Python 3.12
-- Poetry para gerenciamento de dependências
-- python-dotenv para leitura de variáveis locais
-- boto3 para integração com serviços AWS
-- ruff para qualidade e padronização do código
-- AWS Lambda
+**Cloud**
 - Amazon S3
-- Visual Crossing Weather API
-- Git e GitHub
+- AWS Lambda
+- AWS Glue
+- Amazon Athena
+- AWS IAM
+- AWS CodeBuild
 
+**Engenharia de Dados**
+- Python 3.12
+- dbt Core 1.11
+- SQL
+- Jinja
+- Boto3
+**Qualidade**
+- Ruff
+
+**DevOps**
+- Git
+- GitHub
+- Poetry
 
 ### 📁 Estrutura do Projeto:
 ```
 project_aws_clima/
 ├── climabr/
+|       ├── models/
+|       |     ├── landing/   
+|       │     ├── staging/
+|       │     ├── intermediate/
+|       │     └── marts/
+|       ├── tests/
+|       └── macros/
 ├── docs/
-│   ├── images/
-│   └── troubleshooting.md
+│     ├── images/
+│     └── troubleshooting.md
 ├── scripts/
 |       └── reports/
 |              └── aws_report.json
 |              └── validacao_lambda.json
-│   ├── run_lambda_local.py
-│   └── aws_report.py
-|   └── validation_ingestion_lambda.py
+│    ├── run_lambda_local.py
+│    └── aws_report.py
+|    └── validation_ingestion_lambda.py
+|    └── dbt_env_report.py
 |    
 |    
 ├── lambda_function.py
+├── buildspec.yml
 ├── README.md
 ├── LICENSE
 ├── pyproject.toml
 ├── poetry.lock
 └── .env.example
+└── README.md
 ```
 
 ## Descrição dos arquivos:
 
 | Arquivo |	 Função | 
 |--|--| 
+climabr/models/landing | Modelos de ingestão inicial dos dados climáticos
+climabr/models/staging | Padronização, limpeza e tipagem dos dados
+climabr/models/intermediate | Regras de negócio e transformação intermediárias
+climabr/models/marts | Camada analítica final para consumo
 scripts/test_visual_crossing_request.py	|Script local para validar a conexão com a API
-lambda_function.py | 	Arquivo reservado para a função AWS Lambda
-scripts/ | Scripts de teste e validação local da API e integração
+scripts/run_lambda_local.py | Executa e valida localmente a função lambda sem necessidade de deploy em nuvem
+scripts/validation_ingestion_lambda.py | Realiza testes e validações no processo de ingestão pela função Lambda
+scripts/aws_report.py | Gera relatório consolidado do ambiente AWS utilizado pelo projeto
+scripts/dbt_env_report.py | Valida e documenta a configuração ambiente dbt e suas dependências
+scripts/reports/aws_report.json | Relatório gerado automaticamente contendo informações da infraestrutura AWS.
+scripts/reports/validacao_lambda.json | Resultado das validações executadas sobre o processo de execução da ingestão da Lambda.
 docs/images/ | Screenshots de validação no AWS (Athena, S3, Lambda)
 docs/troubleshooting.md | Documentação de problemas, erros e soluções do pipeline
+lambda_function.py | 	Arquivo reservado para a função AWS Lambda
 .env.example |	Modelo das variáveis de ambiente necessárias
+buildspec.yml | Configuração do pipeline via AWS CodeBuild
 .gitignore | Define arquivos que não devem ser versionados
 pyproject.toml |	Configuração do projeto Poetry
 poetry.lock |	Controle exato das versões instaladas
@@ -356,11 +389,11 @@ scripts/aws_report.py
 
 ```json
 {
-    "request_id": "SNC29A1G7M39WMEG",
+    "request_id": "**SNC29A1G7M39WM--**",
     "status_code": 200,
     "region": "us-east-2",
     "bucket_count": 1,
-    "first_bucket": "amazon-s3-clima-project-442767638718-us-east-2-an"
+    "first_bucket": "amazon-s3-clima-project----us-east-2-an"
 }
 ```
 
@@ -421,7 +454,7 @@ raw/clima/source=visual_crossing/date=2026-06-09/location=sao_paulo_br/weather_2
 
 ```json
 {
-    "bucket": "amazon-s3-clima-project-442767638718-us-east-2-an",
+    "bucket": "amazon-s3-clima-project----us-east-2-an",
     "prefix": "raw/clima",
     "total_arquivos": 27,
     "total_particoes": 27,
@@ -519,19 +552,41 @@ Confirma que a estrutura de particionamento esperada foi criada corretamente.
 
 O projeto atualmente possui:
 
+### Ingestão De dados:
+
 - Ambiente Poetry configurado;
 - Lambda operacional em ambiente AWS;
 - Integração com Visual Crossing API;
 - Ingestão de 27 capitais brasileiras;
 - Armazenamento em Amazon S3;
-- Particionamento por data e localização;
 - AWS Glue Crawler configurado;
-- Catálogo de dados criado;
 - Consultas funcionando no Amazon Athena;
 - Payload serializado para evitar conflitos de schema;
-- Estrutura preparada para evolução para camadas Trusted e Refined.
 
-## 🚀 Quer executar o projeto e continuar?
+### Data Lake:
+
+- Armazenamento dos dados brutos em Amazon S3;
+- Estrutura de particionamento por data e localização;
+- Catálogo de dados automatizado via AWS Glue Crawler;
+
+### Camada Analítica:
+
+- Tabelas consultáveis no Amazon Athena;
+- Projeto dbt estruturado em camadas ( Landing/Staging/Intermediate/Marts )
+- Transformações SQL e testes de qualidade via dbt.
+
+### DevOps e Governança:
+
+- Ambiente gerenciado com Poetry;
+- Controle de dependências via **pyproject.toml**;
+- Pipeline configuradi com AWS CodeBuild;
+- Geração automática da documentação via dbt;
+- Publicação automática website estático na AWS;
+- Linhagem de dados (DAG) disponível para consulta via dbt Docs;
+
+Documentação online: https://s3.us-east-2.amazonaws.com/www.climabr.com.br/index.html#!/overview
+
+## 🚀 Quer executar o projeto?
 
 ### 📌 1. Pré-requisitos 
 
@@ -542,8 +597,8 @@ O projeto atualmente possui:
 - Permissões para:
   - AWS Lambda
   - Amazon S3
-  
-  
+  - Amazon Glue
+   
 
 ### 📌 2. Clonar o repositório
 
@@ -577,12 +632,12 @@ python scripts/test_visual_crossing_request.py
 ```
 *A request e KEY são criadas pela IA da Visual Crossing no site oficial*
 
-## 📌 6. Deploy da Lambda 
+### 📌 6. Deploy da Lambda 
 
 O deploy da função Lambda pode ser realizado de duas formas, dependendo das permissões disponíveis na conta AWS:
 
 ---
-### 🔹 1. Deploy via AWS Console 
+## 🔹 1. Deploy via AWS Console 
 
 Este é o método mais simples e não requer configuração local de IAM CLI.
 
@@ -604,20 +659,21 @@ python scripts/run_lambda_local.py
 ```
 ou ``` python lambda_function.py ```
 
-## 📌 7. Configuração do S3 + Glue + Athena
+### 📌 3. Configuração do S3 + Glue + Athena
 
 1. Criar bucket S3 para camada Raw
 2. Configurar serviço AWS Lambda ( tests e deploy )
 3. Configurar AWS Glue Crawler para catalogação dos metadados.
 4. Consultar os dados no AWS Athena.
 
-## 📌 8. Para validar as execuções é bom executar os comandos:
+### 📌 8. Para validar as execuções é bom executar os comandos:
 
-```python scripts/aws_report.py```
+- ```python scripts/aws_report.py```
+- ``` python scripts/alidation_ingestion_lambda```
+
 ---
-``` python scripts/validation_ingestion_lambda```
 
-## 🔄 Transformação de Dados com dbt
+# 🔄 Transformação de Dados com dbt
 
 Após a implementação da camada de ingestão e armazenamento na AWS, foi incorporado ao projeto um pipeline de transformação utilizando dbt (Data Build Tool) integrado ao Amazon Athena.
 
@@ -638,49 +694,8 @@ Staging
    ↓
 Intermediate
    ↓
-Marts (futuro)
+ Marts 
 ```
-
-### Principais Implementações
-
-#### Landing Layer
-
-* Integração do dbt com Amazon Athena.
-* Configuração do catálogo AWS Glue.
-* Definição das fontes (`sources`) para os dados brutos armazenados no Data Lake.
-
-#### Staging Layer
-
-* Padronização de nomes de colunas.
-* Conversão de tipos de dados.
-* Criação de identificadores únicos para cidades.
-* Tratamento inicial de campos meteorológicos.
-
-#### Intermediate Layer
-
-* Consolidação dos dados climáticos.
-* Aplicação de regras de negócio.
-* Organização dos dados para consumo analítico.
-* Criação da modelagem `int_clima_diario`.
-
-### Qualidade e Governança
-
-Foram implementados testes utilizando dbt para validar:
-
-* Unicidade de chaves.
-* Valores nulos.
-* Integridade das tabelas.
-* Consistência das transformações.
-
-### Tecnologias Utilizadas:
-
-
-* dbt Core
-* dbt-athena
-* Amazon Athena
-* AWS Glue Data Catalog
-* Amazon S3
-
 
 ### Evidências:
 
@@ -694,9 +709,10 @@ Foram implementados testes utilizando dbt para validar:
 
 - Consultas analíticas realizadas sobre a camada Intermediate via Amazon Athena
 
-![intermediate_quey](docs/images/intermediate_query.png)
+![intermediate_query](docs/images/intermediate_query.png)
 
 👉 Veja os detalhes da camada de transformação no diretório [climabr](climabr/).
+
 
 
 ## 👤 Autor:

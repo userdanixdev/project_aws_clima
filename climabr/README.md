@@ -6,7 +6,7 @@ O climaBR é a camada de transformação do pipeline de dados climáticos da AWS
 
 Utiliza dbt sobre Amazon Athena para transformar dados brutos ingeridos via AWS Lambda em modelos analíticos confiáveis, estruturados e prontos para consumo.
 
-O projeto segue arquitetura moderna de ETL (Extract → Transform → Load).
+O projeto utiliza práticas modernas de ELT com dbt sobre Amazon Athena, garantindo rastreabilidade, qualidade dos dados e automação completa do ciclo de deploy.
 
 ### 🏗️ Arquitetura do Pipeline:
 ```
@@ -14,19 +14,66 @@ Visual Crossing API
         ↓
 AWS Lambda (Ingestão)
         ↓
-S3 (Landing / Raw Data)
+Amazon S3 (Landing / Raw Data)
         ↓
 AWS Glue Catalog
-        ↓                
-dbt (Transformações)
+        ↓ 
+Amazon Athena                       
         ↓
-Athena (Query Engine)
+     dbt Core 
+┌─────────────────┐ 
+│    Staging      │ 
+├─────────────────┤ 
+│ Intermediate    │ 
+├─────────────────┤ 
+│     Marts       │ 
+└─────────────────┘     
         ↓
-dbt Core 
-├── Staging
-├── Intermediate 
-└── Marts
+    Analytics                
+        ↓
+     dbt docs
+        ↓
+Amazon S3 Website        
 ```
+## 🚀 Pipeline CI/CD
+
+O deploy é totalmente automatizado utilizando AWS CodeBuild.
+
+Fluxo
+GitHub
+   │
+   ▼
+AWS CodeBuild
+   │
+   ├── poetry install
+   ├── dbt build
+   ├── dbt test
+   ├── dbt docs generate
+   │
+   ▼
+Amazon S3
+   │
+   ▼
+dbt Docs Publicado
+
+## Etapas do Pipeline:
+### Install
+
+- Instalação do Poetry
+- Instalação do dbt
+- Criação do ambiente virtual
+- Pre-Build
+- Criação dinâmica do profiles.yml
+- Configuração do Athena
+- Configuração dos buckets S3
+- Build
+- Execução do dbt build
+- Execução dos testes
+- Validação dos modelos
+- Post-Build
+- Geração do dbt Docs
+- Publicação automática no S3
+- Atualização do site de documentação
 
 ## 🧱 Camadas de Dados:
 ### 📥 Landing (Raw)
@@ -100,14 +147,16 @@ Tabela fato utilizada para análise de qualidade da previsão meteorológica.
 
 ### ⚙️ Tecnologias:
 
-- dbt-core 1.11+
+- Python 3.12
+- Poetry
+- dbt Core 1.11+
 - dbt-athena-adapter
-- AWS S3
-- AWS Athena
 - AWS Lambda
-- AWS Glue Data Catalog
-- dbt tests (schema + custom)
-- Configuração
+- Amazon S3
+- AWS Glue Catalog
+- Amazon Athena
+- AWS CodeBuild
+- GitHub Actions / GitHub Releases
 
 1. Instalar dependências
 ```poetry install``` ( Opcional )
@@ -223,18 +272,36 @@ poetry run dbt docs serve
 ### 🏷️ Release:
 
 ```
-Release Atual: v0.1.6 (dbt quality & marts expansion)
+Release Atual: v0.1.7 - Pipeline para ClimaBR via AWS CodeBuild
 ```
 
 *Pipeline de dados desenvolvido com foco em engenharia de dados moderna na AWS utilizando dbt, Athena e boas práticas de modelagem ELT.*
 
 ### ⭐ Destaques do Projeto:
 
-- Arquitetura ETL moderna
-- Camadas bem definidas (staging → intermediate → marts)
-- Regras de negócio auditáveis
-- Testes automatizados com dbt
-- Pronto para escala em produção
+```0.1.7``` - Pipeline para ClimaBR via AWS CodeBuild
+
+### Principais Entregas:
+
+- Pipeline ELT completo
+- Modelagem em camadas
+- Testes automatizados
+- Deploy automatizado via AWS CodeBuild
+- Publicação automática do dbt Docs
+- Versionamento por Releases
+
+### 🎯 Objetivos do Projeto:
+
+- Aplicar boas práticas de Engenharia de Dados
+- Construir pipelines escaláveis
+- Garantir qualidade dos dados
+- Demonstrar arquitetura moderna AWS
+- Disponibilizar dados confiáveis para BI
+
+## Evidências:
+
+![pipeline](../docs/images/code_build_pipeline.png)
+
 
 ### 👨‍💻 Autor
 
