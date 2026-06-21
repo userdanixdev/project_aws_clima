@@ -711,6 +711,8 @@ Intermediate
 
 ![intermediate_query](docs/images/intermediate_query.png)
 
+---
+
 👉 Veja os detalhes da camada de transformação no diretório [climabr](climabr/).
 
 
