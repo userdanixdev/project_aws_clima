@@ -1,0 +1,26 @@
+
+
+{
+    "_comment": "Entrypoint do CDK - Arquivo principal de config que inicializa todas as stacks."
+    "app":"python app.py",
+    "_comment_watch":"Config para monitorar arquivos e mudanças e faz deploy automático."
+    "watch":{
+        "include":["**"],
+        "exclude":[
+            "README.md",
+            "cdk*.json",
+            "**/__pycache__",
+            "**/.venv",
+            "**/reports/*.json"
+        ]
+    },
+    "_comment_context": "Flags de comportamento do CDK seguindo boas práticas da AWS",
+    "context":{
+        "_comment_layer":"Evita recriar recursos desnecessariamente ao reconhecer versões",
+        "@aws-cdk/aws-lambda:recognizeLayerVersion":true,
+        "_comment_secret":"Alerta se algum secret estiver exposto adidentalmente",
+        "@aws-cdk/core:checkSecretusage":true,
+        "_comment_iam":"Agrupa permissões IAM de forma mais enxuta e segura",
+        "@aws-cdk/aws-iam:minimizePolicies": true
+    }
+}

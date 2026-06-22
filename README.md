@@ -110,6 +110,7 @@ Para engenharia de dados, isso é útil porque facilita:
 - SQL
 - Jinja
 - Boto3
+
 **Qualidade**
 - Ruff
 
@@ -666,7 +667,7 @@ ou ``` python lambda_function.py ```
 3. Configurar AWS Glue Crawler para catalogação dos metadados.
 4. Consultar os dados no AWS Athena.
 
-### 📌 8. Para validar as execuções é bom executar os comandos:
+### 📌 4. Para validar as execuções é bom executar os comandos:
 
 - ```python scripts/aws_report.py```
 - ``` python scripts/alidation_ingestion_lambda```
