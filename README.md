@@ -741,6 +741,7 @@ As versões publicadas demonstram a evolução da arquitetura, automações AWS,
 - [v0.1.5 - dbt Intermediate Layer](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.5)
 - [v0.1.6 - Camada Mart (Analítica e Métricas Climáticas)](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.6)
 - [v0.1.7 - Pipeline para ClimaBR via AWS CodeBuild](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.7)
+- [v0.1.8 - Orquestração do Pipeline com AWS Step Functions e EventBridge](https://github.com/userdanixdev/project_aws_clima/releases/tag/v0.1.8)
 
 🔗 Consulte também a página completa de releases:
 https://github.com/userdanixdev/project_aws_clima/releases
