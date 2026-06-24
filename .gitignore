@@ -8,3 +8,5 @@ venv/
 .vscode/
 reports/*
 !reports/.gitkeep
+cdk.out/
+infra/scripts/reports/*.json
