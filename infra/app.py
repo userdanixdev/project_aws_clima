@@ -1,12 +1,19 @@
+from pathlib import Path
 import aws_cdk as cdk
 from stacks.glue_crawler_stack import GlueCrawlerStack
 from stacks.codebuild_stack import CodeBuildStack
 from stacks.step_functions_stack import StepFunctionsStack
 
-app = cdk.App()
-
 # Define a região do projeto
-env = cdk.Environment(region="us-east-2")
+aws_region = app.node.try_get_context("aws_region")
+env = cdk.Environment(region="aws_region")
+
+# Apontamento dos reports:
+infra_dir = Path(__file__).parent
+reports_dir = infra_dir / "scripts" / "reports"
+reports_dir.mkdir(parents=True, exist_ok=True)
+
+app = cdk.App()
 
 # Stack Glue Crawler
 glue_stack = GlueCrawlerStack(app, "GlueCrawlerStack", env=env)
@@ -19,7 +26,7 @@ StepFunctionsStack(
     app,
     "StepFunctionsStack",
     crawler_name=glue_stack.crawler_name,
-    codebuild_project=codebuild_stack.project,
+    codebuild_project=code_build_stack.project,
     env=env,
 )
 

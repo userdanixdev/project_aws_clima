@@ -1,9 +1,9 @@
 
 
 {
-    "_comment": "Entrypoint do CDK - Arquivo principal de config que inicializa todas as stacks."
+    "_comment": "Entrypoint do CDK - Arquivo principal de config que inicializa todas as stacks.",
     "app":"python app.py",
-    "_comment_watch":"Config para monitorar arquivos e mudanças e faz deploy automático."
+    "_comment_watch":"Config para monitorar arquivos e mudanças e faz deploy automático.",
     "watch":{
         "include":["**"],
         "exclude":[
@@ -21,6 +21,18 @@
         "_comment_secret":"Alerta se algum secret estiver exposto adidentalmente",
         "@aws-cdk/core:checkSecretusage":true,
         "_comment_iam":"Agrupa permissões IAM de forma mais enxuta e segura",
-        "@aws-cdk/aws-iam:minimizePolicies": true
+        "@aws-cdk/aws-iam:minimizePolicies": true,
+        "@aws-cdk/core:defaultCrossStackReferences": "strong",
+        "aws_region": "us-east-2",
+        "data_bucket_name": "amazon-s3-clima-project-442767638718-us-east-2-an",
+        "site_bucket_name": "www.climabr.com.br",
+        "github_owner": "userdanixdev",
+        "github_repo": "project_aws_clima",
+        "github_branch": "feature/infra-cdk",
+        "lambda_name": "getAPI-clima",
+        "crawler_name": "crawler-dbt-clima",
+        "glue_database_name": "landing",
+        "codebuild_project_name": "climabr",
+        "state_machine_name": "Pipeline-ClimaBR"
     }
 }
